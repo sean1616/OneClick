@@ -65,6 +65,7 @@
     <Compile Include="Script_Form.Designer.cs">
       <DependentUpon>Script_Form.cs</DependentUpon>
     </Compile>
+    <Compile Include="SetupIniIP.cs" />
     <Compile Include="WIN32API.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

@@ -24,11 +24,11 @@ namespace MouseClick_x01
         bool btn1_step_on = false;
 
         public static SetupIniIP ini = new SetupIniIP();
-
-        string folder_path = Application.StartupPath;
+                
         string script_ini_filename = "MouseClick_script.ini";
 
-        List<string> script_name = new List<string>();
+        public List<string> script_filename = new List<string>();
+        public List<string> script_section = new List<string>();
 
         public Form1()
         {
@@ -38,10 +38,11 @@ namespace MouseClick_x01
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            script_name.Add("script1");
+            script_section.Add("script_sec1");
+            script_filename.Add("MouseClick_script_1.ini");
 
             //ini setup
-            string ini_path = folder_path + @"\" + script_ini_filename;
+            string ini_path = Application.StartupPath + @"\" + script_filename[0];
             if (File.Exists(ini_path))
             {
 
@@ -51,12 +52,12 @@ namespace MouseClick_x01
                     //main_Command.media_volume = Convert.ToDouble(main_Command.ini.IniReadValue("Bar", "volume", main_Command.ini_filename));
                 }
                 else
-                    IniSetup(script_name[0]); //創建ini file並寫入基本設定
+                    ini.IniWriteValue(script_section[0], "btn_opa", "0", script_filename[0]); //創建ini file並寫入基本設定
             }
             else
             {
-                Directory.CreateDirectory(folder_path);  //建立資料夾      
-                IniSetup(script_name[0]); //創建ini file並寫入基本設定
+                Directory.CreateDirectory(Application.StartupPath);  //建立資料夾      
+                ini.IniWriteValue(script_section[0], "btn_opa", "0", script_filename[0]); //創建ini file並寫入基本設定
             }
 
             System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
@@ -75,12 +76,7 @@ namespace MouseClick_x01
 
             hook_Main.InstallHook("1");
         }
-
-        private void IniSetup(string script_name)
-        {
-            ini.IniWriteValue(script_name, "btn_opa", "0", script_ini_filename);
-        }
-
+                
         private void LogWrite(KeyEventArgs e)
         {
             //MessageBox.Show("Get in");
@@ -728,7 +724,7 @@ namespace MouseClick_x01
         public string str = "asdf";
         private void button4_Click(object sender, EventArgs e)
         {
-            Script_Form form = new Script_Form(str);
+            Script_Form form = new Script_Form(ini, script_filename, script_section);
             form.Show();
         }
 
@@ -808,36 +804,8 @@ namespace MouseClick_x01
 
         }
     }
-
-    public class SetupIniIP
-    {
-        public string path;
-
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern long WritePrivateProfileString(string section,
-        string key, string val, string filePath);
-        [DllImport("kernel32", CharSet = CharSet.Unicode)]
-        private static extern int GetPrivateProfileString(string section,
-        string key, string def, StringBuilder retVal,
-        int size, string filePath);
-
-        //ini write
-        public void IniWriteValue(string Section, string Key, string Value, string inipath)
-        {
-            WritePrivateProfileString(Section, Key, Value, Application.StartupPath + inipath);
-        }
-
-        //ini read
-        public string IniReadValue(string Section, string Key, string inipath)
-        {
-            StringBuilder temp = new StringBuilder(255);
-            int i = GetPrivateProfileString(Section, Key, "", temp, 255, Application.StartupPath + inipath);
-            return temp.ToString();
-        }
-    }
-
-
-static public class Mouse
+        
+    static public class Mouse
     {
         [DllImport("user32.dll", SetLastError = true)]
         public static extern Int32 SendInput(Int32 cInputs, ref INPUT pInputs, Int32 cbSize);
