@@ -128,7 +128,7 @@ namespace MouseClick_x01
             cury.Text = Cursor.Position.Y.ToString();            
         }
 
-        int time = 0, min, sec;
+        //int time = 0, min, sec;
         private void Timer2_Tick(object Sender, EventArgs e)
         {
             //time += 1;
