@@ -29,6 +29,7 @@ namespace MouseClick_x01
 
         public List<string> script_filename = new List<string>();
         public List<string> script_section = new List<string>();
+        string ini_path;
 
         public Form1()
         {
@@ -804,8 +805,30 @@ namespace MouseClick_x01
         {
 
         }
-    }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
         
+        private void comboBox1_DropDown(object sender, EventArgs e)
+        {
+            //MessageBox.Show("drop down");
+            for (int i = 1; i <= 30; i++)
+            {
+                //script_filename.Add("MouseClick_script_" + i.ToString() + ".ini"); //將新增的ini檔名寫入list
+                ini_path = Application.StartupPath + @"\" + "MouseClick_script_" + i.ToString() + ".ini";
+
+                if (File.Exists(ini_path))
+                {
+                    //script_filename.Add
+                }
+                comboBox1.Items.Add(new ListViewItem());
+            }
+                
+        }
+    }
+
     static public class Mouse
     {
         [DllImport("user32.dll", SetLastError = true)]
