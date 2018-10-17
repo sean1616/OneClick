@@ -31,7 +31,7 @@ namespace MouseClick_x01
         public Script_Form(SetupIniIP setupIni, List<string> script_filename, List<string> script_section)
         {
             InitializeComponent();
-
+            
             this.TopMost = true;
             this.ini = setupIni;
             //this.script_filename = script_filename;
@@ -86,6 +86,8 @@ namespace MouseClick_x01
             //-1為根據內容設置寬度，-2為根據標題設置寬度
             script_list.Columns["No."].Width = -2;
             script_list.Columns["Event"].Width = -2;
+
+
         }
 
         private void button4_Click(object sender, EventArgs e)

@@ -22,7 +22,7 @@ namespace MouseClick_x01
         private Hocy_Hook hook_Main = new Hocy_Hook();
 
         bool btn1_step_on = false;
-
+        public string aaa = "123";
         public static SetupIniIP ini = new SetupIniIP();
                 
         //string script_ini_filename = "MouseClick_script.ini";
@@ -725,7 +725,7 @@ namespace MouseClick_x01
         public string str = "asdf";
         private void button4_Click(object sender, EventArgs e)
         {
-            hook_Main.UnInstallHook();
+            hook_Main.UnInstallHook();  //卸戴main form的掛鉤
             Script_Form form = new Script_Form(ini, script_filename, script_section);
             form.Show();
         }
@@ -810,7 +810,7 @@ namespace MouseClick_x01
         {
 
         }
-        
+        ListViewItem lv = new ListViewItem();
         private void comboBox1_DropDown(object sender, EventArgs e)
         {
             //MessageBox.Show("drop down");
@@ -819,13 +819,20 @@ namespace MouseClick_x01
                 //script_filename.Add("MouseClick_script_" + i.ToString() + ".ini"); //將新增的ini檔名寫入list
                 ini_path = Application.StartupPath + @"\" + "MouseClick_script_" + i.ToString() + ".ini";
 
-                if (File.Exists(ini_path))
+                if (File.Exists(ini_path) && !comboBox1.Items.Contains("MouseClick_script_" + i.ToString()))
                 {
-                    //script_filename.Add
+                    //lv.SubItems.Clear();
+                    //script_filename.Add("MouseClick_script_" + i.ToString());
+                    comboBox1.Items.Add("MouseClick_script_" + i.ToString());
                 }
-                comboBox1.Items.Add(new ListViewItem());
+                
             }
                 
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
         }
     }
 
