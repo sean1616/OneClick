@@ -31,6 +31,8 @@ namespace MouseClick_x01
         public List<string> script_section = new List<string>();
         string ini_path;
 
+        Script_Form form;
+
         public Form1()
         {
             InitializeComponent();
@@ -41,26 +43,7 @@ namespace MouseClick_x01
 
             script_section.Add("script_sec1");
             script_filename.Add("MouseClick_script_1.ini");
-
-            //ini setup
-            //string ini_path = Application.StartupPath + @"\" + script_filename[0];
-            //if (File.Exists(ini_path))
-            //{
-
-            //    if (File.Exists(ini_path))
-            //    {
-            //        //讀取ini
-            //        //main_Command.media_volume = Convert.ToDouble(main_Command.ini.IniReadValue("Bar", "volume", main_Command.ini_filename));
-            //    }
-            //    else
-            //        ini.IniWriteValue(script_section[0], "btn_opa", "0", script_filename[0]); //創建ini file並寫入基本設定
-            //}
-            //else
-            //{
-            //    Directory.CreateDirectory(Application.StartupPath);  //建立資料夾      
-            //    ini.IniWriteValue(script_section[0], "btn_opa", "0", script_filename[0]); //創建ini file並寫入基本設定
-            //}
-
+                        
             System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
 
             timer1.Interval = 200;
@@ -124,6 +107,8 @@ namespace MouseClick_x01
 
 
         private void Timer1_Tick(object Sender, EventArgs e)
+
+
         {
             curx.Text = Cursor.Position.X.ToString();
             cury.Text = Cursor.Position.Y.ToString();            
@@ -726,8 +711,12 @@ namespace MouseClick_x01
         private void button4_Click(object sender, EventArgs e)
         {
             hook_Main.UnInstallHook();  //卸戴main form的掛鉤
-            Script_Form form = new Script_Form(ini, script_filename, script_section);
+            
+            form = new Script_Form(); //Creat a script form.
+            
             form.Show();
+
+            
         }
 
         private void button1_Click(object sender, EventArgs e)

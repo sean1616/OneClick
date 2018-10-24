@@ -19,98 +19,163 @@ namespace MouseClick_x01
     public partial class Script_Form : Form
     {
         SetupIniIP ini;
-        List<string> script_filename;
-        List<string> script_section;
 
         int index_list;
+        DataTable dt;
         private Hocy_Hook hook_Main = new Hocy_Hook();
-        string ini_path;
+        string csvpath;
 
         bool capture_checkbox_status = false;
 
-        public Script_Form(SetupIniIP setupIni, List<string> script_filename, List<string> script_section)
+        public Script_Form()
         {
             InitializeComponent();
             
-            this.TopMost = true;
-            this.ini = setupIni;
-            //this.script_filename = script_filename;
-            this.script_section = script_section;
+            this.TopMost = true;           
 
             this.hook_Main.OnKeyDown += new KeyEventHandler(hook_MainKeyDown);
         }
-        DateTime dt = new DateTime();
+
+        private void Script_Form_Load(object sender, EventArgs e)
+        {
+            csvpath = Application.StartupPath + @"\" + "Script_" + "1" + ".csv";
+
+            dt = new DataTable();
+            try
+            {
+                string[] lines = File.ReadAllLines(csvpath);
+
+                if (lines.Length > 0)
+                {
+                    //first line to create header
+                    string firstLine = lines[0];
+                    string[] headerLabels = firstLine.Split(',');
+
+                    foreach (string headerWord in headerLabels)
+                    {
+                        dt.Columns.Add(new DataColumn(headerWord));
+                    }
+
+                    try
+                    {
+                        //for data
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            string[] datas = lines[i].Split(',');
+                            DataRow dr = dt.NewRow();
+                            int columIndex = 0;
+                            foreach (string headerWord in headerLabels)
+                            {
+                                dr[headerWord] = datas[columIndex++];
+                            }
+                            dt.Rows.Add(dr);
+
+                            //dataGridView_script.AutoResizeColumns();
+                            dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("File format is wrong.");
+                        return;
+                    }
+                }
+
+                if (dt.Rows.Count > 0)
+                    dataGridView_script.DataSource = dt;
+            }
+            catch
+            {
+                MessageBox.Show("File is opened in another program.");
+                return;
+            }                       
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            script_filename = new List<string>();
+            int scriptIndex = 1;
+
+            StringBuilder csvcontent = new StringBuilder();  //動態字串
+
+            //Add grid header
+            csvcontent.Append("No.,");
+            csvcontent.Append("Event,");
+            csvcontent.Append("X,");
+            csvcontent.Append("Y");
+
+            csvpath = Application.StartupPath + @"\" + "Script_" + scriptIndex.ToString() + ".csv";
+
             for (int i = 1; i <= 30; i++)
             {
-                script_filename.Add("MouseClick_script_" + i.ToString() + ".ini"); //將新增的ini檔名寫入list
-                ini_path = Application.StartupPath + @"\" + script_filename[i-1];
-                if (!File.Exists(ini_path))
+                if (!File.Exists(csvpath))
                 {
-                    ini.IniWriteValue(script_section[0], "Built up time ", DateTime.Now.ToString(), script_filename[i-1]); //創建ini file並寫入基本設定
-                    script_name_statusbar.Text = script_filename[i-1];
-                    index_list = i - 1;
+                    File.AppendAllText(csvpath, csvcontent.ToString());
                     return;
-                }                    
+                }
+                else
+                    scriptIndex++;
+                    csvpath = Application.StartupPath + @"\" + "Script_" + scriptIndex.ToString() + ".csv";
             }          
-            
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            script_list.Items.Add("HIHI");
+            
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (dataGridView_script.SelectedRows.Count > 0 && !dataGridView_script.SelectedRows[0].IsNewRow)
+                dataGridView_script.Rows.Remove(dataGridView_script.SelectedRows[0]);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //Clear file content and lock the file
+            FileStream fileStream = File.Open(csvpath, FileMode.Open);
+            fileStream.SetLength(0);
+            fileStream.Close();
+
+            //Save datagridview_script to a string builder
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < dataGridView_script.Columns.Count; i++)
+            {
+                if (dataGridView_script.Columns[i].HeaderCell == null)
+                    return;
+
+                stringBuilder.Append(dataGridView_script.Columns[i].HeaderText);
+                if(i<dataGridView_script.Columns.Count-1)
+                    stringBuilder.Append(",");
+            }
+
+            stringBuilder.AppendLine();
+
+            foreach(DataGridViewRow dg in dataGridView_script.Rows)
+            {                
+                //for data
+                for (int i = 0; i < dataGridView_script.ColumnCount; i++)
+                {
+                    if (dg.Cells[i].Value != null)
+                    {
+                        stringBuilder.Append(dg.Cells[i].Value);
+                        stringBuilder.Append(",");                        
+                    }
+                    else
+                    {
+                        stringBuilder.Append(" ,");
+                    }                    
+                }
+                stringBuilder.AppendLine();
+            }
+
+            File.AppendAllText(csvpath, stringBuilder.ToString());  //Save string builder to csv
+        }
+               
         private void script_list_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void Script_Form_Load(object sender, EventArgs e)
-        {
-            script_list.GridLines = true;//表格是否顯示網格
-            script_list.FullRowSelect = false;//是否選中整行
-                        
-            script_list.View = View.Details;//設置顯示方式
-            script_list.Scrollable = true;//是否自動顯示滾動條
-            script_list.MultiSelect = false;//是否可以選擇多行
-
-            //添加表頭（列）
-            script_list.Columns.Add("No.", "No.");
-            script_list.Columns.Add("Event", "Event");
-            script_list.Columns.Add("X", 60, HorizontalAlignment.Center);
-            script_list.Columns.Add("Y", 60, HorizontalAlignment.Center);
-
-            //-1為根據內容設置寬度，-2為根據標題設置寬度
-            script_list.Columns["No."].Width = -2;
-            script_list.Columns["Event"].Width = -2;
-
-
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            //if (capture_checkbox_status == false)
-            //    return;
-
-            ////添加表格内容
-            //for (int i = 1; i <= 3; i++)
-            //{
-            //    ListViewItem item = new ListViewItem();
-            //    item.SubItems.Clear();
-
-            //    item.SubItems[0].Text= i.ToString();
-            //    item.SubItems.Add("Click");
-            //    item.SubItems.Add((i + 7).ToString());
-            //    item.SubItems.Add((i * i).ToString());
-            //    script_list.Items.Add(item);
-            //}
-            
-                
-        }
-        
         private void Click_Check_CheckedChanged(object sender, EventArgs e)
         {
             capture_checkbox_status = !capture_checkbox_status;
@@ -134,37 +199,31 @@ namespace MouseClick_x01
         private void Write_Click(KeyEventArgs e)
         {
             Point point = Cursor.Position;
+            
+            string[] axis = new string[] { (dt.Rows.Count+1).ToString(), "Click", point.X.ToString(), point.Y.ToString() };
+                        
+            //添加表格内容   
+            string[] lines = File.ReadAllLines(csvpath);
+            string[] headers = lines[0].Split(',');
 
-            //添加表格内容
-            int i = 1;
-
-            ListViewItem item = new ListViewItem();
-            item.SubItems.Clear();
-
-            item.SubItems[0].Text = i.ToString();
-            item.SubItems.Add("Click");
-            item.SubItems.Add((point.X).ToString());
-            item.SubItems.Add((point.Y).ToString());
-            script_list.Items.Add(item);
-        }
-        int i_count = 0;
-        private void button3_Click(object sender, EventArgs e)
-        {         
-            if (File.Exists(ini_path))
+            DataRow dr = dt.NewRow();
+            int columIndex = 0;
+            foreach (string header in headers)
             {
-                foreach (ListViewItem item in script_list.Items)
-                {
-                    i_count++;
-                    var objA = item.SubItems[1].Text;  //Action
-                    var objX = item.SubItems[2].Text;  //X
-                    var objY = item.SubItems[3].Text;  //Y
-
-                    ini.IniWriteValue(objA + "_" + i_count.ToString(), "X", objX, script_filename[index_list]); //寫入腳本
-                    ini.IniWriteValue(objA + "_" + i_count.ToString(), "Y", objY, script_filename[index_list]); //寫入腳本
-                }        
+                dr[header] = axis[columIndex++];
             }
-            else
-                MessageBox.Show("File doesn't exist");
+            dt.Rows.Add(dr);
+
+            dataGridView_script.DataSource = dt;
+
+            //dataGridView_script.AutoResizeColumns();
+            //dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        }
+        DataGridViewRow dr;
+        private void dataGridView_script_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {          
+            if(dataGridView_script.SelectedRows.Count > 0)
+                dr = dataGridView_script.SelectedRows[0];            
         }
     }
 
