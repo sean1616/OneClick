@@ -44,10 +44,9 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(18, 18);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button1.Location = new System.Drawing.Point(12, 12);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(77, 34);
+            this.button1.Size = new System.Drawing.Size(51, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "New";
             this.button1.UseVisualStyleBackColor = true;
@@ -55,10 +54,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(103, 18);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button2.Location = new System.Drawing.Point(69, 12);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(80, 34);
+            this.button2.Size = new System.Drawing.Size(53, 23);
             this.button2.TabIndex = 2;
             this.button2.Text = "Modify";
             this.button2.UseVisualStyleBackColor = true;
@@ -66,10 +64,9 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(191, 18);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button3.Location = new System.Drawing.Point(127, 12);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(77, 34);
+            this.button3.Size = new System.Drawing.Size(51, 23);
             this.button3.TabIndex = 3;
             this.button3.Text = "Delete";
             this.button3.UseVisualStyleBackColor = true;
@@ -77,10 +74,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(276, 18);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button4.Location = new System.Drawing.Point(184, 12);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(79, 34);
+            this.button4.Size = new System.Drawing.Size(53, 23);
             this.button4.TabIndex = 4;
             this.button4.Text = "Save";
             this.button4.UseVisualStyleBackColor = true;
@@ -92,31 +88,29 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
             this.script_name_statusbar});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 770);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 510);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(406, 28);
+            this.statusStrip1.Size = new System.Drawing.Size(249, 22);
             this.statusStrip1.TabIndex = 5;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(66, 23);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(43, 17);
             this.toolStripStatusLabel1.Text = "script: ";
             // 
             // script_name_statusbar
             // 
             this.script_name_statusbar.Name = "script_name_statusbar";
-            this.script_name_statusbar.Size = new System.Drawing.Size(0, 23);
+            this.script_name_statusbar.Size = new System.Drawing.Size(0, 17);
             // 
             // Click_Check
             // 
             this.Click_Check.AutoSize = true;
-            this.Click_Check.Location = new System.Drawing.Point(18, 62);
-            this.Click_Check.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Click_Check.Location = new System.Drawing.Point(12, 41);
             this.Click_Check.Name = "Click_Check";
-            this.Click_Check.Size = new System.Drawing.Size(88, 22);
+            this.Click_Check.Size = new System.Drawing.Size(61, 16);
             this.Click_Check.TabIndex = 7;
             this.Click_Check.Text = "Capture";
             this.Click_Check.UseVisualStyleBackColor = true;
@@ -124,30 +118,30 @@
             // 
             // dataGridView_script
             // 
+            this.dataGridView_script.AllowUserToAddRows = false;
             this.dataGridView_script.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_script.Location = new System.Drawing.Point(18, 94);
-            this.dataGridView_script.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dataGridView_script.Location = new System.Drawing.Point(12, 63);
             this.dataGridView_script.Name = "dataGridView_script";
             this.dataGridView_script.RowTemplate.Height = 24;
-            this.dataGridView_script.Size = new System.Drawing.Size(375, 666);
+            this.dataGridView_script.Size = new System.Drawing.Size(225, 444);
             this.dataGridView_script.TabIndex = 8;
             this.dataGridView_script.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_script_CellContentClick);
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(363, 18);
-            this.button5.Margin = new System.Windows.Forms.Padding(4);
+            this.button5.Location = new System.Drawing.Point(184, 37);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(42, 34);
+            this.button5.Size = new System.Drawing.Size(53, 23);
             this.button5.TabIndex = 9;
             this.button5.Text = "Go";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // Script_Form
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(406, 798);
+            this.ClientSize = new System.Drawing.Size(249, 532);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.dataGridView_script);
             this.Controls.Add(this.Click_Check);
@@ -156,7 +150,6 @@
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Script_Form";
             this.Text = "Script_Form";
             this.Load += new System.EventHandler(this.Script_Form_Load);

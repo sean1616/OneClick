@@ -91,6 +91,7 @@ namespace MouseClick_x01
             }                       
         }
 
+        //New button
         private void button1_Click(object sender, EventArgs e)
         {
             int scriptIndex = 1;
@@ -123,12 +124,14 @@ namespace MouseClick_x01
             
         }
 
+        //Delete button
         private void button3_Click(object sender, EventArgs e)
         {
             if (dataGridView_script.SelectedRows.Count > 0 && !dataGridView_script.SelectedRows[0].IsNewRow)
                 dataGridView_script.Rows.Remove(dataGridView_script.SelectedRows[0]);
         }
 
+        //Save button
         private void button4_Click(object sender, EventArgs e)
         {
             //Clear file content and lock the file
@@ -170,7 +173,20 @@ namespace MouseClick_x01
 
             File.AppendAllText(csvpath, stringBuilder.ToString());  //Save string builder to csv
         }
-               
+
+        //GO button
+        private void button5_Click(object sender, EventArgs e)
+        {
+            foreach(DataGridViewRow dg in dataGridView_script.Rows)
+            {
+                Point p = new Point(Convert.ToInt32(dg.Cells[2].Value), Convert.ToInt32(dg.Cells[3].Value));
+
+                Action_Click(p);
+            }
+
+            
+        }
+
         private void script_list_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -219,11 +235,24 @@ namespace MouseClick_x01
             //dataGridView_script.AutoResizeColumns();
             //dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
+
         DataGridViewRow dr;
         private void dataGridView_script_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {          
             if(dataGridView_script.SelectedRows.Count > 0)
                 dr = dataGridView_script.SelectedRows[0];            
+        }       
+
+        private void Action_Click(Point p)
+        {
+            Point point = Cursor.Position;
+
+            Cursor.Position = new Point(p.X, p.Y);
+            Mouse.LeftClick();
+
+            Cursor.Position = point; //Back to origin position
+
+            Thread.Sleep(100);
         }
     }
 
