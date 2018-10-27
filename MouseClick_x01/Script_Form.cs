@@ -24,12 +24,14 @@ namespace MouseClick_x01
         DataTable dt;
         private Hocy_Hook hook_Main = new Hocy_Hook();
         string csvpath;
-
+        internal string selected_csv;
         bool capture_checkbox_status = false;
 
-        public Script_Form()
+        public Script_Form(string selected_csv)
         {
             InitializeComponent();
+
+            this.selected_csv = selected_csv;
             
             this.TopMost = true;           
 
@@ -38,7 +40,7 @@ namespace MouseClick_x01
 
         private void Script_Form_Load(object sender, EventArgs e)
         {
-            csvpath = Application.StartupPath + @"\" + "Script_" + "1" + ".csv";
+            csvpath = Application.StartupPath + @"\" + selected_csv + ".csv";
 
             dt = new DataTable();
             try
@@ -233,7 +235,7 @@ namespace MouseClick_x01
             dataGridView_script.DataSource = dt;
 
             //dataGridView_script.AutoResizeColumns();
-            //dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
 
         DataGridViewRow dr;

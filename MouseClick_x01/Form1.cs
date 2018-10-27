@@ -22,15 +22,13 @@ namespace MouseClick_x01
         private Hocy_Hook hook_Main = new Hocy_Hook();
 
         bool btn1_step_on = false;
-        public string aaa = "123";
         public static SetupIniIP ini = new SetupIniIP();
                 
         //string script_ini_filename = "MouseClick_script.ini";
 
         public List<string> script_filename = new List<string>();
         public List<string> script_section = new List<string>();
-        string ini_path;
-
+        string csv_path;
         Script_Form form;
 
         public Form1()
@@ -40,6 +38,8 @@ namespace MouseClick_x01
             this.TopMost = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+
+            
 
             script_section.Add("script_sec1");
             script_filename.Add("MouseClick_script_1.ini");
@@ -59,6 +59,25 @@ namespace MouseClick_x01
             //this.hook_Main.OnKeyUp += new KeyEventHandler(hook_MainKeyUp);
 
             hook_Main.InstallHook("1");
+
+            //Search all csv file and set into combobox
+            comboBox1.Items.Clear();
+            for (int i = 1; i <= 30; i++)
+            {
+                csv_path = Application.StartupPath + @"\" + "Script_" + i.ToString() + ".csv";
+
+                if (File.Exists(csv_path))
+                {
+                    comboBox1.Items.Add("Script_" + i.ToString());
+                }
+            }
+            //Initial combobox's selected item
+            if (comboBox1.Items.Count > 0)
+            {
+                comboBox1.SelectedIndex = 0;
+                selected_csv = comboBox1.SelectedItem.ToString();
+            }
+
         }
                 
         private void LogWrite(KeyEventArgs e)
@@ -704,18 +723,15 @@ namespace MouseClick_x01
                     Thread.Sleep(800);
                     break;
             }
-
-
         }
         public string str = "asdf";
         private void button4_Click(object sender, EventArgs e)
         {
             hook_Main.UnInstallHook();  //卸戴main form的掛鉤
             
-            form = new Script_Form(); //Creat a script form.
+            form = new Script_Form(selected_csv); //Creat a script form.
             
             form.Show();
-
             
         }
 
@@ -802,19 +818,15 @@ namespace MouseClick_x01
         ListViewItem lv = new ListViewItem();
         private void comboBox1_DropDown(object sender, EventArgs e)
         {
-            //MessageBox.Show("drop down");
+            comboBox1.Items.Clear();
             for (int i = 1; i <= 30; i++)
             {
-                //script_filename.Add("MouseClick_script_" + i.ToString() + ".ini"); //將新增的ini檔名寫入list
-                ini_path = Application.StartupPath + @"\" + "MouseClick_script_" + i.ToString() + ".ini";
+                csv_path = Application.StartupPath + @"\" + "Script_" + i.ToString() + ".csv";
 
-                if (File.Exists(ini_path) && !comboBox1.Items.Contains("MouseClick_script_" + i.ToString()))
-                {
-                    //lv.SubItems.Clear();
-                    //script_filename.Add("MouseClick_script_" + i.ToString());
-                    comboBox1.Items.Add("MouseClick_script_" + i.ToString());
-                }
-                
+                if (File.Exists(csv_path))
+                {                   
+                    comboBox1.Items.Add("Script_" + i.ToString());
+                }                
             }
                 
         }
@@ -822,6 +834,17 @@ namespace MouseClick_x01
         private void button5_Click(object sender, EventArgs e)
         {
 
+        }
+        internal string selected_csv;
+        private void comboBox1_DropDownClosed(object sender, EventArgs e)
+        {
+            selected_csv = comboBox1.SelectedItem.ToString();
+            //MessageBox.Show(selected_csv);
+        }
+
+        public string Selected_csv()
+        {
+            return selected_csv;
         }
     }
 

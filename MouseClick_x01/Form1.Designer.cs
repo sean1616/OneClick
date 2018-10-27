@@ -186,6 +186,7 @@
             this.comboBox1.TabIndex = 28;
             this.comboBox1.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.DropDownClosed += new System.EventHandler(this.comboBox1_DropDownClosed);
             // 
             // button5
             // 
