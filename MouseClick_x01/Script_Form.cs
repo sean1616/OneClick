@@ -181,9 +181,16 @@ namespace MouseClick_x01
         {
             foreach(DataGridViewRow dg in dataGridView_script.Rows)
             {
-                Point p = new Point(Convert.ToInt32(dg.Cells[2].Value), Convert.ToInt32(dg.Cells[3].Value));
+                string sw_string = dg.Cells[1].Value.ToString();
+                switch (sw_string)
+                {
+                    case "Click":
+                        Point p = new Point(Convert.ToInt32(dg.Cells[2].Value), Convert.ToInt32(dg.Cells[3].Value));
+                        Action_Click(p);
+                        break;
 
-                Action_Click(p);
+                }
+               
             }
 
             
