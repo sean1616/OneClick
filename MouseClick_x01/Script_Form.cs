@@ -46,7 +46,7 @@ namespace MouseClick_x01
             try
             {
                 string[] lines = File.ReadAllLines(csvpath);
-
+                
                 if (lines.Length > 0)
                 {
                     //first line to create header
