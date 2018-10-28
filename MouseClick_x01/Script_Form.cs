@@ -90,7 +90,11 @@ namespace MouseClick_x01
             {
                 MessageBox.Show("File is opened in another program.");
                 return;
-            }                       
+            }
+
+            //Set form size
+            dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
+            this.Height = dataGridView_script.Height + 127;
         }
 
         //New button
@@ -182,6 +186,8 @@ namespace MouseClick_x01
             foreach(DataGridViewRow dg in dataGridView_script.Rows)
             {
                 string sw_string = dg.Cells[1].Value.ToString();
+                string X = dg.Cells[2].Value.ToString();
+                string Y = dg.Cells[3].Value.ToString();
                 switch (sw_string)
                 {
                     case "Click":
@@ -189,11 +195,15 @@ namespace MouseClick_x01
                         Action_Click(p);
                         break;
 
-                }
-               
-            }
+                    case "Delay":
+                        Action_Delay(X);
+                        break;
 
-            
+                    case "Key":
+                        Action_Key(X);
+                        break;
+                }               
+            }            
         }
 
         private void script_list_SelectedIndexChanged(object sender, EventArgs e)
@@ -215,18 +225,46 @@ namespace MouseClick_x01
             {
                 Write_Click(e);                
             }
-            else if (e.KeyCode == Keys.F2)
+            else if (e.KeyCode == Keys.F2 && capture_checkbox_status == true)
             {
-                
+                Write_Delay();
             }
+            else if (e.KeyCode == Keys.F3 && capture_checkbox_status == true)
+            {
+                Write_Key();
+            }
+
+            //Set form size
+            dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
+            this.Height = dataGridView_script.Height + 127;
         }
 
+        #region Functions Collection
         private void Write_Click(KeyEventArgs e)
         {
             Point point = Cursor.Position;
             
             string[] axis = new string[] { (dt.Rows.Count+1).ToString(), "Click", point.X.ToString(), point.Y.ToString() };
-                        
+
+            Update_Table(axis);
+        }
+
+        private void Write_Delay()
+        {
+            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Delay", "100", "ms" };
+
+            Update_Table(row);
+        }
+
+        private void Write_Key()
+        {
+            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Key", " ", " " };
+
+            Update_Table(row);
+        }
+
+        private void Update_Table(string[] row)
+        {
             //添加表格内容   
             string[] lines = File.ReadAllLines(csvpath);
             string[] headers = lines[0].Split(',');
@@ -235,23 +273,24 @@ namespace MouseClick_x01
             int columIndex = 0;
             foreach (string header in headers)
             {
-                dr[header] = axis[columIndex++];
+                dr[header] = row[columIndex++];
             }
             dt.Rows.Add(dr);
 
             dataGridView_script.DataSource = dt;
 
-            //dataGridView_script.AutoResizeColumns();
             dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
         }
+        #endregion
 
         DataGridViewRow dr;
         private void dataGridView_script_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {          
             if(dataGridView_script.SelectedRows.Count > 0)
                 dr = dataGridView_script.SelectedRows[0];            
-        }       
+        }
 
+        #region Actions Collection
         private void Action_Click(Point p)
         {
             Point point = Cursor.Position;
@@ -263,7 +302,22 @@ namespace MouseClick_x01
 
             Thread.Sleep(100);
         }
+
+        private void Action_Delay(string t)
+        {
+            int delay_time;
+            if (int.TryParse(t, out delay_time))
+            {
+                Thread.Sleep(delay_time);                
+            }
+        }
+
+        private void Action_Key(string key)
+        {
+            SendKeys.SendWait(key);
+        }
+        #endregion
     }
 
-    
+
 }

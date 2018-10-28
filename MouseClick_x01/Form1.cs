@@ -798,9 +798,7 @@ namespace MouseClick_x01
             filename = txt1.Text + "_" + txt2.Text + "G_" + txt3.Text + "_" + txt4.Text + "_" + txt5.Text + "dB";
             Clipboard.SetText(filename);
             SendKeys.Send("^{V}");
-
-
-
+                            
             btn1_step_on = true;
 
             //timer2.Enabled = true;           
