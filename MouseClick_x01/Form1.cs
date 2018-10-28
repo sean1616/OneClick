@@ -51,7 +51,7 @@ namespace MouseClick_x01
 
             timer1.Interval = 200;
             timer1.Tick += Timer1_Tick;
-            timer1.Enabled = true;
+            //timer1.Enabled = true;
 
             timer2.Interval = 100;
             timer2.Tick += Timer2_Tick;
@@ -130,11 +130,8 @@ namespace MouseClick_x01
         }
 
         private void Timer1_Tick(object Sender, EventArgs e)
-
-
         {
-            curx.Text = Cursor.Position.X.ToString();
-            cury.Text = Cursor.Position.Y.ToString();            
+                 
         }
 
         private void Timer2_Tick(object Sender, EventArgs e)

@@ -293,7 +293,12 @@ namespace MouseClick_x01
                 dr = dataGridView_script.SelectedRows[0];            
         }
 
-        
+        private void dataGridView_script_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            dataGridView_script.Width = dataGridView_script.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + 45;
+            this.Width = dataGridView_script.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)  + 80;
+
+        }
     }
 
 
