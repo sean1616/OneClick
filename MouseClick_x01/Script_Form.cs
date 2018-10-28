@@ -19,7 +19,8 @@ namespace MouseClick_x01
     public partial class Script_Form : Form
     {
         SetupIniIP ini;
-
+        Actions_Collection AC;
+        
         int index_list;
         DataTable dt;
         private Hocy_Hook hook_Main = new Hocy_Hook();
@@ -30,6 +31,8 @@ namespace MouseClick_x01
         public Script_Form(string selected_csv)
         {
             InitializeComponent();
+
+            AC = new Actions_Collection();
 
             this.selected_csv = selected_csv;
             
@@ -192,15 +195,15 @@ namespace MouseClick_x01
                 {
                     case "Click":
                         Point p = new Point(Convert.ToInt32(dg.Cells[2].Value), Convert.ToInt32(dg.Cells[3].Value));
-                        Action_Click(p);
+                        AC.Action_Click(p);
                         break;
 
                     case "Delay":
-                        Action_Delay(X);
+                        AC.Action_Delay(X);
                         break;
 
                     case "Key":
-                        Action_Key(X);
+                        AC.Action_Key(X, Y);
                         break;
                 }               
             }            
@@ -258,7 +261,7 @@ namespace MouseClick_x01
 
         private void Write_Key()
         {
-            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Key", " ", " " };
+            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Key", "", "" };
 
             Update_Table(row);
         }
@@ -290,33 +293,7 @@ namespace MouseClick_x01
                 dr = dataGridView_script.SelectedRows[0];            
         }
 
-        #region Actions Collection
-        private void Action_Click(Point p)
-        {
-            Point point = Cursor.Position;
-
-            Cursor.Position = new Point(p.X, p.Y);
-            Mouse.LeftClick();
-
-            Cursor.Position = point; //Back to origin position
-
-            Thread.Sleep(100);
-        }
-
-        private void Action_Delay(string t)
-        {
-            int delay_time;
-            if (int.TryParse(t, out delay_time))
-            {
-                Thread.Sleep(delay_time);                
-            }
-        }
-
-        private void Action_Key(string key)
-        {
-            SendKeys.SendWait(key);
-        }
-        #endregion
+        
     }
 
 

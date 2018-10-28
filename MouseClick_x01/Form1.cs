@@ -23,13 +23,16 @@ namespace MouseClick_x01
 
         bool btn1_step_on = false;
         public static SetupIniIP ini = new SetupIniIP();
-                
-        //string script_ini_filename = "MouseClick_script.ini";
+
+        DataTable dt;
+        Script_Form form;
+        Actions_Collection AC;
 
         public List<string> script_filename = new List<string>();
         public List<string> script_section = new List<string>();
-        string csv_path;
-        Script_Form form;
+        string csv_path, filename;
+        string[] filenameBox;
+        internal string selected_csv;        
 
         public Form1()
         {
@@ -39,7 +42,7 @@ namespace MouseClick_x01
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            
+            AC = new Actions_Collection();
 
             script_section.Add("script_sec1");
             script_filename.Add("MouseClick_script_1.ini");
@@ -79,10 +82,58 @@ namespace MouseClick_x01
             }
 
         }
-                
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            csv_path = Application.StartupPath + @"\" + selected_csv + ".csv";
+
+            dt = new DataTable();
+            try
+            {
+                string[] lines = File.ReadAllLines(csv_path);
+
+                if (lines.Length > 0)
+                {
+                    //first line to create header
+                    string firstLine = lines[0];
+                    string[] headerLabels = firstLine.Split(',');
+
+                    foreach (string headerWord in headerLabels)
+                    {
+                        dt.Columns.Add(new DataColumn(headerWord));
+                    }
+
+                    try
+                    {
+                        //for data
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            string[] datas = lines[i].Split(',');
+                            DataRow dr = dt.NewRow();
+                            int columIndex = 0;
+                            foreach (string headerWord in headerLabels)
+                            {
+                                dr[headerWord] = datas[columIndex++];
+                            }
+                            dt.Rows.Add(dr);
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("File format is wrong.");
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("File is opened in another program.");
+                return;
+            }
+        }
+
         private void LogWrite(KeyEventArgs e)
         {
-            //MessageBox.Show("Get in");
             //Action 7
             SendKeys.SendWait("{ENTER}");
             Thread.Sleep(1500);
@@ -94,13 +145,7 @@ namespace MouseClick_x01
 
             //Action 9
             Cursor.Position = new Point(930,644);
-            Mouse.LeftClick();
-            //Thread.Sleep(8300);
-
-            //Action 10
-            //Cursor.Position = new Point(885,470);
-            //Mouse.LeftClick();
-            //Thread.Sleep(500);
+            Mouse.LeftClick();            
         }
 
         private void hook_MainKeyDown(object sender, KeyEventArgs e)
@@ -124,7 +169,6 @@ namespace MouseClick_x01
             btn1_step_on = false;
         }
 
-
         private void Timer1_Tick(object Sender, EventArgs e)
 
 
@@ -133,19 +177,10 @@ namespace MouseClick_x01
             cury.Text = Cursor.Position.Y.ToString();            
         }
 
-        //int time = 0, min, sec;
         private void Timer2_Tick(object Sender, EventArgs e)
-        {
-            //time += 1;
-
-            //min = time / 60;
-            //sec = time % 60;           
-
+        {                
             
-        }
-
-        string[] filenameBox;
-        string filename;
+        }               
 
         private void txt2_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -186,12 +221,7 @@ namespace MouseClick_x01
                 SendKeys.Send("{tab}");
             }
         }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
+                
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
 
@@ -724,7 +754,7 @@ namespace MouseClick_x01
                     break;
             }
         }
-        public string str = "asdf";
+        
         private void button4_Click(object sender, EventArgs e)
         {
             hook_Main.UnInstallHook();  //卸戴main form的掛鉤
@@ -825,19 +855,89 @@ namespace MouseClick_x01
                 {                   
                     comboBox1.Items.Add("Script_" + i.ToString());
                 }                
-            }
-                
+            }                
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
+            foreach (DataRow dr in dt.Rows)
+            {
+                string sw_string = dr[1].ToString();
+                string X = dr[2].ToString();
+                string Y = dr[3].ToString();
+                switch (sw_string)
+                {
+                    case "Click":
+                        Point p = new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
+                        AC.Action_Click(p);
+                        break;
 
+                    case "Delay":
+                        AC.Action_Delay(X);
+                        break;
+
+                    case "Key":
+                        AC.Action_Key(X, Y);
+                        break;
+                }
+            }
         }
-        internal string selected_csv;
+        
         private void comboBox1_DropDownClosed(object sender, EventArgs e)
         {
             selected_csv = comboBox1.SelectedItem.ToString();
             //MessageBox.Show(selected_csv);
+        }
+
+        private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            selected_csv = comboBox1.SelectedItem.ToString();
+
+            csv_path = Application.StartupPath + @"\" + selected_csv + ".csv";
+
+            dt = new DataTable();
+            try
+            {
+                string[] lines = File.ReadAllLines(csv_path);
+
+                if (lines.Length > 0)
+                {
+                    //first line to create header
+                    string firstLine = lines[0];
+                    string[] headerLabels = firstLine.Split(',');
+
+                    foreach (string headerWord in headerLabels)
+                    {
+                        dt.Columns.Add(new DataColumn(headerWord));
+                    }
+
+                    try
+                    {
+                        //for data
+                        for (int i = 1; i < lines.Length; i++)
+                        {
+                            string[] datas = lines[i].Split(',');
+                            DataRow dr = dt.NewRow();
+                            int columIndex = 0;
+                            foreach (string headerWord in headerLabels)
+                            {
+                                dr[headerWord] = datas[columIndex++];
+                            }
+                            dt.Rows.Add(dr);
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("File format is wrong.");
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("File is opened in another program.");
+                return;
+            }
         }
 
         public string Selected_csv()

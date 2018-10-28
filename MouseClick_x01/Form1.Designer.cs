@@ -44,6 +44,7 @@
             this.button4 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.button5 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // button1
@@ -146,10 +147,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(13, 38);
+            this.button2.Location = new System.Drawing.Point(87, 38);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(87, 22);
+            this.button2.Size = new System.Drawing.Size(65, 22);
             this.button2.TabIndex = 24;
             this.button2.Text = "Set";
             this.button2.UseVisualStyleBackColor = true;
@@ -157,10 +158,10 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(111, 38);
+            this.button3.Location = new System.Drawing.Point(156, 38);
             this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(87, 22);
+            this.button3.Size = new System.Drawing.Size(59, 22);
             this.button3.TabIndex = 25;
             this.button3.Text = "Set";
             this.button3.UseVisualStyleBackColor = true;
@@ -168,7 +169,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(151, 7);
+            this.button4.Location = new System.Drawing.Point(155, 8);
             this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(60, 23);
@@ -182,11 +183,12 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(13, 10);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(132, 20);
+            this.comboBox1.Size = new System.Drawing.Size(138, 20);
             this.comboBox1.TabIndex = 28;
             this.comboBox1.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             this.comboBox1.DropDownClosed += new System.EventHandler(this.comboBox1_DropDownClosed);
+            this.comboBox1.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
             // button5
             // 
@@ -199,11 +201,22 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(13, 42);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(56, 16);
+            this.checkBox1.TabIndex = 30;
+            this.checkBox1.Text = "Repeat";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(225, 157);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button4);
@@ -248,6 +261,7 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 
