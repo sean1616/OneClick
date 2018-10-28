@@ -112,8 +112,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(76, 12);
             this.label1.TabIndex = 17;
-            this.label1.Text = "Mouse Position";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.label1.Text = "Mouse Position";            
             // 
             // txt3
             // 
@@ -187,7 +186,6 @@
             this.comboBox1.TabIndex = 28;
             this.comboBox1.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            this.comboBox1.DropDownClosed += new System.EventHandler(this.comboBox1_DropDownClosed);
             this.comboBox1.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
             // button5

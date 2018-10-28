@@ -85,51 +85,7 @@ namespace MouseClick_x01
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            csv_path = Application.StartupPath + @"\" + selected_csv + ".csv";
-
-            dt = new DataTable();
-            try
-            {
-                string[] lines = File.ReadAllLines(csv_path);
-
-                if (lines.Length > 0)
-                {
-                    //first line to create header
-                    string firstLine = lines[0];
-                    string[] headerLabels = firstLine.Split(',');
-
-                    foreach (string headerWord in headerLabels)
-                    {
-                        dt.Columns.Add(new DataColumn(headerWord));
-                    }
-
-                    try
-                    {
-                        //for data
-                        for (int i = 1; i < lines.Length; i++)
-                        {
-                            string[] datas = lines[i].Split(',');
-                            DataRow dr = dt.NewRow();
-                            int columIndex = 0;
-                            foreach (string headerWord in headerLabels)
-                            {
-                                dr[headerWord] = datas[columIndex++];
-                            }
-                            dt.Rows.Add(dr);
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("File format is wrong.");
-                        return;
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("File is opened in another program.");
-                return;
-            }
+            Update_datatable();
         }
 
         private void LogWrite(KeyEventArgs e)
@@ -158,6 +114,10 @@ namespace MouseClick_x01
             else if (e.KeyCode == Keys.F2)
             {
                 btn1_step_on = false;
+            }
+            else if (e.KeyCode == Keys.Escape)
+            {
+                checkBox1.Checked = false;
             }
         }
 
@@ -224,19 +184,14 @@ namespace MouseClick_x01
                 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            hook_Main.UnInstallHook();
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             //hook stop
             this.hook_Main.UnInstallHook();
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
+        }                
 
         private void check_textbox()
         {
@@ -764,15 +719,9 @@ namespace MouseClick_x01
             form.Show();
             
         }
-
+               
         private void button1_Click(object sender, EventArgs e)
-        {
-            //if(checkBox1.Checked && txt1x.Text != "" && txt1y.Text != "")
-            //{
-            //    Cursor.Position = new Point(Convert.ToInt32(txt1x.Text), Convert.ToInt16(txt1y.Text));
-            //    Mouse.LeftClick();
-            //}                  
-            
+        {                             
             if (btn1_step_on == true)
             {
                 MessageBox.Show("Press F1(F2) to continue(cancel).");
@@ -833,12 +782,7 @@ namespace MouseClick_x01
 
             //timer2.Enabled = true;           
         }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
+               
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -860,39 +804,47 @@ namespace MouseClick_x01
 
         private void button5_Click(object sender, EventArgs e)
         {
-            foreach (DataRow dr in dt.Rows)
+            hook_Main.InstallHook("1"); //開啟掛鉤
+
+            do
             {
-                string sw_string = dr[1].ToString();
-                string X = dr[2].ToString();
-                string Y = dr[3].ToString();
-                switch (sw_string)
+                foreach (DataRow dr in dt.Rows)
                 {
-                    case "Click":
-                        Point p = new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
-                        AC.Action_Click(p);
-                        break;
+                    string sw_string = dr[1].ToString();
+                    string X = dr[2].ToString();
+                    string Y = dr[3].ToString();
+                    switch (sw_string)
+                    {
+                        case "Click":
+                            Point p = new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
+                            AC.Action_Click(p);
+                            break;
 
-                    case "Delay":
-                        AC.Action_Delay(X);
-                        break;
+                        case "Delay":
+                            AC.Action_Delay(X);
+                            break;
 
-                    case "Key":
-                        AC.Action_Key(X, Y);
-                        break;
+                        case "Key":
+                            AC.Action_Key(X, Y);
+                            break;
+                    }
                 }
             }
-        }
-        
-        private void comboBox1_DropDownClosed(object sender, EventArgs e)
-        {
-            selected_csv = comboBox1.SelectedItem.ToString();
-            //MessageBox.Show(selected_csv);
-        }
+            while (checkBox1.Checked);
+           
+
+            hook_Main.UnInstallHook();
+        }               
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
         {
             selected_csv = comboBox1.SelectedItem.ToString();
 
+            Update_datatable();
+        }
+
+        private void Update_datatable()
+        {
             csv_path = Application.StartupPath + @"\" + selected_csv + ".csv";
 
             dt = new DataTable();
