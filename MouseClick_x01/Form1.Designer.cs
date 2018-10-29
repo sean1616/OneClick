@@ -45,7 +45,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(13, 91);
+            this.button1.Location = new System.Drawing.Point(13, 90);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(132, 27);
@@ -56,7 +56,7 @@
             // 
             // txt1
             // 
-            this.txt1.Location = new System.Drawing.Point(13, 65);
+            this.txt1.Location = new System.Drawing.Point(13, 64);
             this.txt1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt1.Name = "txt1";
             this.txt1.Size = new System.Drawing.Size(36, 22);
@@ -66,7 +66,7 @@
             // 
             // txt2
             // 
-            this.txt2.Location = new System.Drawing.Point(56, 65);
+            this.txt2.Location = new System.Drawing.Point(56, 64);
             this.txt2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt2.Name = "txt2";
             this.txt2.Size = new System.Drawing.Size(24, 22);
@@ -76,7 +76,7 @@
             // 
             // txt3
             // 
-            this.txt3.Location = new System.Drawing.Point(87, 65);
+            this.txt3.Location = new System.Drawing.Point(87, 64);
             this.txt3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt3.Name = "txt3";
             this.txt3.Size = new System.Drawing.Size(26, 22);
@@ -86,7 +86,7 @@
             // 
             // txt4
             // 
-            this.txt4.Location = new System.Drawing.Point(120, 65);
+            this.txt4.Location = new System.Drawing.Point(120, 64);
             this.txt4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt4.Name = "txt4";
             this.txt4.Size = new System.Drawing.Size(44, 22);
@@ -96,7 +96,7 @@
             // 
             // txt5
             // 
-            this.txt5.Location = new System.Drawing.Point(174, 65);
+            this.txt5.Location = new System.Drawing.Point(174, 64);
             this.txt5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txt5.Name = "txt5";
             this.txt5.Size = new System.Drawing.Size(33, 22);
@@ -106,7 +106,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(80, 38);
+            this.button2.Location = new System.Drawing.Point(80, 37);
             this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(65, 22);
@@ -117,7 +117,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(150, 38);
+            this.button3.Location = new System.Drawing.Point(150, 37);
             this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(58, 22);
@@ -128,7 +128,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(150, 8);
+            this.button4.Location = new System.Drawing.Point(150, 9);
             this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(58, 23);
@@ -140,7 +140,7 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(13, 10);
+            this.comboBox1.Location = new System.Drawing.Point(13, 11);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(132, 20);
             this.comboBox1.TabIndex = 28;
@@ -150,7 +150,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(151, 91);
+            this.button5.Location = new System.Drawing.Point(151, 90);
             this.button5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(56, 27);
@@ -162,7 +162,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(13, 42);
+            this.checkBox1.Location = new System.Drawing.Point(13, 41);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(56, 16);
             this.checkBox1.TabIndex = 30;

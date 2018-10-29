@@ -130,7 +130,14 @@ namespace MouseClick_x01
 
         private void button2_Click(object sender, EventArgs e)
         {
+            DataRow dr = dt.NewRow();
+            dt.Rows.InsertAt(dr, dataGridView_script.CurrentCell.RowIndex + 1);
             
+            int i = 1;
+            foreach(DataRow dataRow in dt.Rows)
+            {
+                dataRow[0] = i++;
+            }
         }
 
         //Delete button
@@ -207,6 +214,15 @@ namespace MouseClick_x01
                         break;
                 }               
             }            
+        }
+
+        private void datascript_rowcount_changed()
+        {
+            int i = 1;
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                dataRow[0] = i++;
+            }
         }
 
         private void script_list_SelectedIndexChanged(object sender, EventArgs e)
@@ -298,6 +314,17 @@ namespace MouseClick_x01
             dataGridView_script.Width = dataGridView_script.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + 45;
             this.Width = dataGridView_script.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)  + 80;
 
+        }
+
+        private void dataGridView_script_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            datascript_rowcount_changed();
+        }
+
+        private void dataGridView_script_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            //MessageBox.Show("123");
+            datascript_rowcount_changed();
         }
     }
 
