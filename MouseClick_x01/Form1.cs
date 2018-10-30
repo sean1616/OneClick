@@ -67,13 +67,18 @@ namespace MouseClick_x01
             comboBox1.Items.Clear();
             for (int i = 1; i <= 30; i++)
             {
-                csv_path = Application.StartupPath + @"\" + "Script_" + i.ToString() + ".csv";
-
+                csv_path = Application.StartupPath + @"\" + "Script_" + i.ToString() + ".csv";                
                 if (File.Exists(csv_path))
                 {
                     comboBox1.Items.Add("Script_" + i.ToString());
                 }
             }
+
+            //csv_path = Application.StartupPath + @"\" + "Script_" + "1" + ".csv";
+            //string[] files = System.IO.Directory.GetFiles(Application.StartupPath, "*.csv");
+
+
+
             //Initial combobox's selected item
             if (comboBox1.Items.Count > 0)
             {

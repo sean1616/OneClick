@@ -118,7 +118,7 @@
             this.dataGridView_script.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_script_CellContentClick);
             this.dataGridView_script.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridView_script_ColumnWidthChanged);
             this.dataGridView_script.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridView_script_RowsAdded);
-            this.dataGridView_script.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridView_script_RowsRemoved);
+            this.dataGridView_script.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dataGridView_script_UserDeletedRow);
             // 
             // button5
             // 

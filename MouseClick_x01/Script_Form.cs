@@ -221,6 +221,7 @@ namespace MouseClick_x01
             int i = 1;
             foreach (DataRow dataRow in dt.Rows)
             {
+                
                 dataRow[0] = i++;
             }
         }
@@ -320,10 +321,9 @@ namespace MouseClick_x01
         {
             datascript_rowcount_changed();
         }
-
-        private void dataGridView_script_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+                
+        private void dataGridView_script_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
-            //MessageBox.Show("123");
             datascript_rowcount_changed();
         }
     }
