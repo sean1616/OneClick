@@ -11,18 +11,20 @@ using System.Windows.Forms;
 
 using System.Timers;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace MouseClick_x01
 {
     public partial class Form1 : Form
     {
-        System.Windows.Forms.Timer timer2 = new System.Windows.Forms.Timer();
+        System.Windows.Forms.Timer timer1, timer2;
 
         private Hocy_Hook hook_Main = new Hocy_Hook();
 
         bool btn1_step_on = false;
         public static SetupIniIP ini = new SetupIniIP();
+        string sw_string, X, Y;
 
         DataTable dt;
         Script_Form form;
@@ -47,10 +49,11 @@ namespace MouseClick_x01
             script_section.Add("script_sec1");
             script_filename.Add("MouseClick_script_1.ini");
                         
-            System.Windows.Forms.Timer timer1 = new System.Windows.Forms.Timer();
+            timer1 = new System.Windows.Forms.Timer();
+            timer2 = new System.Windows.Forms.Timer();
 
-            timer1.Interval = 200;
-            timer1.Tick += Timer1_Tick;
+            //timer1.Interval = 200;
+            //timer1.Tick += Timer1_Tick;
             //timer1.Enabled = true;
 
             timer2.Interval = 100;
@@ -136,13 +139,50 @@ namespace MouseClick_x01
 
         private void Timer1_Tick(object Sender, EventArgs e)
         {
-                 
+            do
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    sw_string = dr[1].ToString();
+                    X = dr[2].ToString();
+                    Y = dr[3].ToString();
+
+                    int delay_time;
+                    if (sw_string == "Delay")
+                        int.TryParse(X, out delay_time);
+                    else
+                        delay_time = 50;
+
+                    timer1.Interval = delay_time;
+
+                    switch (sw_string)
+                    {
+                        case "Click":
+                            Point p = new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
+                            AC.Action_Click(p);
+                            break;
+
+                        //case "Delay":
+                        //    AC.Action_Delay(X);
+                        //    break;
+
+                        case "Key":
+                            AC.Action_Key(X, Y);
+                            break;
+                    }
+
+                    progressBar1.PerformStep();
+                }
+            }
+            while (checkBox1.Checked);
+
+            
         }
 
         private void Timer2_Tick(object Sender, EventArgs e)
         {                
             
-        }               
+        }   
 
         private void txt2_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -806,15 +846,22 @@ namespace MouseClick_x01
 
         private void button5_Click(object sender, EventArgs e)
         {
+            toolStripStatusLabel1.Text = "Wokring";
             hook_Main.InstallHook("1"); //開啟掛鉤
+
+            progressBar1.Value = 0;
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = dt.Rows.Count;
+            progressBar1.Step = 1;   
 
             do
             {
                 foreach (DataRow dr in dt.Rows)
                 {
-                    string sw_string = dr[1].ToString();
-                    string X = dr[2].ToString();
-                    string Y = dr[3].ToString();
+                    sw_string = dr[1].ToString();
+                    X = dr[2].ToString();
+                    Y = dr[3].ToString();
+                    
                     switch (sw_string)
                     {
                         case "Click":
@@ -830,12 +877,15 @@ namespace MouseClick_x01
                             AC.Action_Key(X, Y);
                             break;
                     }
+
+                    progressBar1.PerformStep();
                 }
             }
             while (checkBox1.Checked);
-           
 
             hook_Main.UnInstallHook();
+
+            toolStripStatusLabel1.Text = "Complete";
         }               
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
@@ -893,7 +943,7 @@ namespace MouseClick_x01
                 return;
             }
         }
-
+        
         public string Selected_csv()
         {
             return selected_csv;

@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Text;
@@ -7,6 +9,17 @@ namespace MouseClick_x01
 {
     public class Actions_Collection
     {
+        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+
+        bool timer_check = false;
+
+        private bool Set_Timer(int interval)
+        {
+            timer.Interval = interval;
+
+            return timer_check = false;
+        }
+
         #region Actions Collection
         public void Action_Click(Point p)
         {
@@ -17,15 +30,18 @@ namespace MouseClick_x01
 
             Cursor.Position = point; //Back to origin position
 
-            Thread.Sleep(100);
+            Thread.Sleep(50);
         }
 
         public void Action_Delay(string t)
         {
             int delay_time;
+            
             if (int.TryParse(t, out delay_time))
             {
-                Thread.Sleep(delay_time);
+                TimeSpan ts = new TimeSpan(0, 0, 0, delay_time/1000, delay_time%1000);
+                Task.Delay(ts).Wait();
+                //Thread.Sleep(delay_time);
             }
         }
 
