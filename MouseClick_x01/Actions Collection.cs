@@ -107,6 +107,16 @@ namespace MouseClick_x01
                 MessageBox.Show("Somethin wrong when send the key");
             }
         }
+
+        public Keys Action_WaitKey(string key_X, string key_Y)
+        {
+            Keys k;
+            if (Enum.TryParse<Keys>(key_X, out k))
+            {
+                
+            }
+            return k;
+        }
         #endregion
     }
 }

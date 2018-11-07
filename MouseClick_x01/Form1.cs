@@ -135,7 +135,7 @@ namespace MouseClick_x01
             {
                 checkBox1.Checked = false;
 
-                if (Check_Close == true)
+                if (Check_Close == true) //Crtl + ESC to shutdown app
                     this.Close();
             }
             else if (e.KeyData == Keys.LControlKey)
