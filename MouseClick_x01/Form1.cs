@@ -67,18 +67,23 @@ namespace MouseClick_x01
             hook_Main.InstallHook("1");
 
             //Search all csv file and set into combobox
-            comboBox1.Items.Clear();
-            for (int i = 1; i <= 30; i++)
-            {
-                csv_path = Application.StartupPath + @"\" + "Script_" + i.ToString() + ".csv";                
-                if (File.Exists(csv_path))
-                {
-                    comboBox1.Items.Add("Script_" + i.ToString());
-                }
-            }
+            //comboBox1.Items.Clear();
+            //for (int i = 1; i <= 30; i++)
+            //{
+            //    csv_path = Application.StartupPath + @"\" + "Script_" + i.ToString() + ".csv";                
+            //    if (File.Exists(csv_path))
+            //    {
+            //        comboBox1.Items.Add("Script_" + i.ToString());
+            //    }
+            //}
 
             //csv_path = Application.StartupPath + @"\" + "Script_" + "1" + ".csv";
-            //string[] files = System.IO.Directory.GetFiles(Application.StartupPath, "*.csv");
+            comboBox1.Items.Clear();
+            string[] files = System.IO.Directory.GetFiles(Application.StartupPath, "*.csv");
+            foreach(string file in files)
+            {
+                comboBox1.Items.Add(Path.GetFileNameWithoutExtension(file));
+            }
 
 
 
@@ -757,7 +762,8 @@ namespace MouseClick_x01
             hook_Main.UnInstallHook();  //卸戴main form的掛鉤
             
             form = new Script_Form(selected_csv); //Creat a script form.
-            
+            form.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            form.Location = new System.Drawing.Point(this.Right, this.Top);
             form.Show();
             
         }
@@ -833,15 +839,11 @@ namespace MouseClick_x01
         private void comboBox1_DropDown(object sender, EventArgs e)
         {
             comboBox1.Items.Clear();
-            for (int i = 1; i <= 30; i++)
+            string[] files = System.IO.Directory.GetFiles(Application.StartupPath, "*.csv");
+            foreach (string file in files)
             {
-                csv_path = Application.StartupPath + @"\" + "Script_" + i.ToString() + ".csv";
-
-                if (File.Exists(csv_path))
-                {                   
-                    comboBox1.Items.Add("Script_" + i.ToString());
-                }                
-            }                
+                comboBox1.Items.Add(Path.GetFileNameWithoutExtension(file));
+            }
         }
 
         private void button5_Click(object sender, EventArgs e)
