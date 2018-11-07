@@ -23,6 +23,7 @@ namespace MouseClick_x01
         private Hocy_Hook hook_Main = new Hocy_Hook();
 
         bool btn1_step_on = false;
+        bool Check_Close = false;
         public static SetupIniIP ini = new SetupIniIP();
         string sw_string, X, Y;
 
@@ -61,6 +62,7 @@ namespace MouseClick_x01
 
             //this.hook_Main.OnMouseActivity += new MouseEventHandler(hook_MainMouseMove);
             this.hook_Main.OnKeyDown += new KeyEventHandler(hook_MainKeyDown);
+            this.hook_Main.OnKeyUp += new KeyEventHandler(hook_MainKeyUp);
             //this.hook_Main.OnKeyPress += new KeyPressEventHandler(hook_MainKeyPress);
             //this.hook_Main.OnKeyUp += new KeyEventHandler(hook_MainKeyUp);
 
@@ -127,10 +129,27 @@ namespace MouseClick_x01
             else if (e.KeyCode == Keys.F2)
             {
                 btn1_step_on = false;
+                MessageBox.Show("1234");
             }
-            else if (e.KeyCode == Keys.Escape)
+            else if (e.KeyCode == Keys.Escape)  //ESC終止repeat
             {
                 checkBox1.Checked = false;
+
+                if (Check_Close == true)
+                    this.Close();
+            }
+            else if (e.KeyData == Keys.LControlKey)
+            {
+                Check_Close = true;
+            }
+            
+        }
+
+        private void hook_MainKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.LControlKey)
+            {
+                Check_Close = false;
             }
         }
 
@@ -830,11 +849,7 @@ namespace MouseClick_x01
 
             //timer2.Enabled = true;           
         }
-               
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+        
         ListViewItem lv = new ListViewItem();
         private void comboBox1_DropDown(object sender, EventArgs e)
         {
@@ -848,6 +863,8 @@ namespace MouseClick_x01
 
         private void button5_Click(object sender, EventArgs e)
         {
+            Update_datatable();
+
             toolStripStatusLabel1.Text = "Wokring";
             hook_Main.InstallHook("1"); //開啟掛鉤
 
@@ -892,9 +909,7 @@ namespace MouseClick_x01
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
         {
-            selected_csv = comboBox1.SelectedItem.ToString();
-
-            Update_datatable();
+            selected_csv = comboBox1.SelectedItem.ToString();            
         }
 
         private void Update_datatable()
