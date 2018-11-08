@@ -21,9 +21,11 @@ namespace MouseClick_x01
         System.Windows.Forms.Timer timer1, timer2;
 
         private Hocy_Hook hook_Main = new Hocy_Hook();
-
+        Keys key;
         bool btn1_step_on = false;
         bool Check_Close = false;
+        DataRow pause_dr;
+        bool continued_check = false;
         public static SetupIniIP ini = new SetupIniIP();
         string sw_string, X, Y;
 
@@ -138,11 +140,55 @@ namespace MouseClick_x01
                 if (Check_Close == true) //Crtl + ESC to shutdown app
                     this.Close();
             }
-            else if (e.KeyData == Keys.LControlKey)
+            else if (e.KeyData == Keys.LControlKey)  //Crtl + ESC to shutdown app
             {
                 Check_Close = true;
             }
-            
+            else if (e.KeyCode == key)
+            {
+                //MessageBox.Show("Keyin");
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    if (dr != pause_dr && continued_check != true)
+                    {
+                        //Do nothing
+                    }
+                    else if (dr == pause_dr)
+                    {
+                        continued_check = true;
+                    }
+                    else
+                    {
+                        sw_string = dr[1].ToString();
+                        X = dr[2].ToString();
+                        Y = dr[3].ToString();
+                        switch (sw_string)
+                        {
+                            case "Click":
+                                Point p = new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
+                                AC.Action_Click(p);
+                                break;
+
+                            case "Delay":
+                                AC.Action_Delay(X);
+                                break;
+
+                            case "Key":
+                                AC.Action_Key(X, Y);
+                                break;
+
+                            case "WaitKey":
+                                key = AC.Action_WaitKey(X, Y);
+                                pause_dr = dr;
+                                return;
+                        }
+                    }
+                }
+                hook_Main.UnInstallHook();
+            }
+
+
         }
 
         private void hook_MainKeyUp(object sender, KeyEventArgs e)
@@ -895,6 +941,12 @@ namespace MouseClick_x01
                         case "Key":
                             AC.Action_Key(X, Y);
                             break;
+
+                        case "WaitKey":
+                            key = AC.Action_WaitKey(X, Y);
+                            pause_dr = dr;
+                            hook_Main.InstallHook("1");
+                            return;
                     }
 
                     progressBar1.PerformStep();

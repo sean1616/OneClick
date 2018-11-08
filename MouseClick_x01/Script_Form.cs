@@ -21,12 +21,13 @@ namespace MouseClick_x01
         SetupIniIP ini;
         Actions_Collection AC;
 
-        DataGridViewRow pasueed_dg = new DataGridViewRow();
+        DataGridViewRow pause_dg = new DataGridViewRow();
         DataTable dt;
         private Hocy_Hook hook_Main = new Hocy_Hook();
         string csvpath;
         internal string selected_csv;
         bool capture_checkbox_status = false;
+        bool continued_check = false;
         Keys key;
 
         public Script_Form(string selected_csv)
@@ -216,7 +217,7 @@ namespace MouseClick_x01
 
                     case "WaitKey":
                         key = AC.Action_WaitKey(X, Y);
-                        pasueed_dg = dg;
+                        pause_dg = dg;
                         hook_Main.InstallHook("1");
                         return;
                 }               
@@ -266,34 +267,44 @@ namespace MouseClick_x01
             }
             else if (e.KeyCode == key)
             {                
-                MessageBox.Show("Keyin");
+                //MessageBox.Show("Keyin");
                 
                 foreach (DataGridViewRow dg in dataGridView_script.Rows)
                 {
-                    string sw_string = dg.Cells[1].Value.ToString();
-                    string X = dg.Cells[2].Value.ToString();
-                    string Y = dg.Cells[3].Value.ToString();
-                    switch (sw_string)
+                    if (dg != pause_dg && continued_check!=true)
                     {
-                        case "Click":
-                            Point p = new Point(Convert.ToInt32(dg.Cells[2].Value), Convert.ToInt32(dg.Cells[3].Value));
-                            AC.Action_Click(p);
-                            break;
-
-                        case "Delay":
-                            AC.Action_Delay(X);
-                            break;
-
-                        case "Key":
-                            AC.Action_Key(X, Y);
-                            break;
-
-                        case "WaitKey":
-                            key = AC.Action_WaitKey(X, Y);
-                            pasueed_dg = dg;
-                            //hook_Main.InstallHook("1");
-                            return;
+                        //Do nothing
+                    }                        
+                    else if (dg == pause_dg)
+                    {
+                        continued_check = true;                        
                     }
+                    else
+                    {
+                        string sw_string = dg.Cells[1].Value.ToString();
+                        string X = dg.Cells[2].Value.ToString();
+                        string Y = dg.Cells[3].Value.ToString();
+                        switch (sw_string)
+                        {
+                            case "Click":
+                                Point p = new Point(Convert.ToInt32(dg.Cells[2].Value), Convert.ToInt32(dg.Cells[3].Value));
+                                AC.Action_Click(p);
+                                break;
+
+                            case "Delay":
+                                AC.Action_Delay(X);
+                                break;
+
+                            case "Key":
+                                AC.Action_Key(X, Y);
+                                break;
+
+                            case "WaitKey":
+                                key = AC.Action_WaitKey(X, Y);
+                                pause_dg = dg;
+                                return;
+                        }
+                    }             
                 }
                 hook_Main.UnInstallHook();
             }
