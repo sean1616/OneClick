@@ -147,6 +147,7 @@ namespace MouseClick_x01
             else if (e.KeyCode == key)
             {
                 //MessageBox.Show("Keyin");
+                toolStripStatusLabel1.Text = "Working";
 
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -181,11 +182,15 @@ namespace MouseClick_x01
                             case "WaitKey":
                                 key = AC.Action_WaitKey(X, Y);
                                 pause_dr = dr;
+                                toolStripStatusLabel1.Text = "Waiting";
                                 return;
                         }
                     }
                 }
-                hook_Main.UnInstallHook();
+                if(progressBar1.Value>=100)
+                    hook_Main.UnInstallHook();
+
+                toolStripStatusLabel1.Text = "Complete";
             }
 
 
@@ -946,6 +951,7 @@ namespace MouseClick_x01
                             key = AC.Action_WaitKey(X, Y);
                             pause_dr = dr;
                             hook_Main.InstallHook("1");
+                            toolStripStatusLabel1.Text = "Waiting";
                             return;
                     }
 
