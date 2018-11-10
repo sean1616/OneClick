@@ -11,21 +11,24 @@ using System.Windows.Forms;
 
 using System.Timers;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace MouseClick_x01
 {
     public partial class Form1 : Form
     {
+        Thread sample;
+
         System.Windows.Forms.Timer timer1, timer2;
+        System.Threading.Timer timer3;
+        TimerCallback callback;
 
         private Hocy_Hook hook_Main = new Hocy_Hook();
         Keys key;
         bool btn1_step_on = false;
         bool Check_Close = false;
-        DataRow pause_dr;
-        bool continued_check = false;
+        int pause_No;
+        double time_spent, t, tt;
         public static SetupIniIP ini = new SetupIniIP();
         string sw_string, X, Y;
 
@@ -54,12 +57,12 @@ namespace MouseClick_x01
                         
             timer1 = new System.Windows.Forms.Timer();
             timer2 = new System.Windows.Forms.Timer();
-
+                                                           
             //timer1.Interval = 200;
             //timer1.Tick += Timer1_Tick;
             //timer1.Enabled = true;
 
-            timer2.Interval = 100;
+            timer2.Interval = 200;
             timer2.Tick += Timer2_Tick;
 
             //this.hook_Main.OnMouseActivity += new MouseEventHandler(hook_MainMouseMove);
@@ -69,35 +72,20 @@ namespace MouseClick_x01
             //this.hook_Main.OnKeyUp += new KeyEventHandler(hook_MainKeyUp);
 
             hook_Main.InstallHook("1");
-
-            //Search all csv file and set into combobox
-            //comboBox1.Items.Clear();
-            //for (int i = 1; i <= 30; i++)
-            //{
-            //    csv_path = Application.StartupPath + @"\" + "Script_" + i.ToString() + ".csv";                
-            //    if (File.Exists(csv_path))
-            //    {
-            //        comboBox1.Items.Add("Script_" + i.ToString());
-            //    }
-            //}
-
-            //csv_path = Application.StartupPath + @"\" + "Script_" + "1" + ".csv";
+                        
             comboBox1.Items.Clear();
             string[] files = System.IO.Directory.GetFiles(Application.StartupPath, "*.csv");
             foreach(string file in files)
             {
                 comboBox1.Items.Add(Path.GetFileNameWithoutExtension(file));
             }
-
-
-
+            
             //Initial combobox's selected item
             if (comboBox1.Items.Count > 0)
             {
                 comboBox1.SelectedIndex = 0;
                 selected_csv = comboBox1.SelectedItem.ToString();
             }
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -151,14 +139,10 @@ namespace MouseClick_x01
 
                 foreach (DataRow dr in dt.Rows)
                 {
-                    if (dr != pause_dr && continued_check != true)
+                    if (int.Parse(dr[0].ToString()) <= pause_No)
                     {
                         //Do nothing
-                    }
-                    else if (dr == pause_dr)
-                    {
-                        continued_check = true;
-                    }
+                    }                    
                     else
                     {
                         sw_string = dr[1].ToString();
@@ -181,14 +165,14 @@ namespace MouseClick_x01
 
                             case "WaitKey":
                                 key = AC.Action_WaitKey(X, Y);
-                                pause_dr = dr;
+                                pause_No = int.Parse(dr[0].ToString());
                                 toolStripStatusLabel1.Text = "Waiting";
                                 return;
                         }
+
                     }
                 }
-                if(progressBar1.Value>=100)
-                    hook_Main.UnInstallHook();
+                hook_Main.UnInstallHook();
 
                 toolStripStatusLabel1.Text = "Complete";
             }
@@ -237,10 +221,6 @@ namespace MouseClick_x01
                             AC.Action_Click(p);
                             break;
 
-                        //case "Delay":
-                        //    AC.Action_Delay(X);
-                        //    break;
-
                         case "Key":
                             AC.Action_Key(X, Y);
                             break;
@@ -255,49 +235,39 @@ namespace MouseClick_x01
         }
 
         private void Timer2_Tick(object Sender, EventArgs e)
-        {                
-            
-        }   
-
-        private void txt2_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                SendKeys.Send("{tab}");
-            }
-        }
+            double tt = double.Parse(toolStripStatusLabel2.Text) + 0.2;
+            //toolStripStatusLabel2.Text = (tt).ToString();
 
-        private void txt1_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                SendKeys.Send("{tab}");
-            }
+            if (tt >= time_spent)
+                timer2.Enabled = false;  //關閉ProgressBar的更新timer
         }
+                
+        private void Timer3_Tick(object state)
+        {            
+            tt = double.Parse(toolStripStatusLabel2.Text) + 0.2;
 
-        private void txt3_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                SendKeys.Send("{tab}");
-            }
-        }
+            this.BeginInvoke(new setLable2(setLabel2));
 
-        private void txt4_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
+            if (tt >= time_spent)
             {
-                SendKeys.Send("{tab}");
+                //timer3.Change(Timeout.Infinite, Timeout.Infinite); //關閉ProgressBar的更新timer
+                timer3.Dispose();
             }
+                
         }
-
-        private void txt5_KeyPress(object sender, KeyPressEventArgs e)
+        delegate void setLable2();
+        private void setLabel2()
         {
-            if (e.KeyChar == (char)Keys.Enter)
+            progressBar1.PerformStep();
+            if (tt > time_spent)
             {
-                SendKeys.Send("{tab}");
-            }
-        }
+                toolStripStatusLabel2.Text = time_spent.ToString();
+                progressBar1.Value = progressBar1.Maximum;
+            }                          
+            else
+                toolStripStatusLabel2.Text = (tt).ToString();
+        }                
                 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -308,6 +278,12 @@ namespace MouseClick_x01
         {
             //hook stop
             this.hook_Main.UnInstallHook();
+
+            if (sample != null)
+            {
+                if (sample.IsAlive)
+                    sample.Abort();
+            }
         }                
 
         private void check_textbox()
@@ -324,520 +300,8 @@ namespace MouseClick_x01
             }
         }
 
-        int[] UFA_No = new int[2];
-        int UFA_dB = new int();
-        private void button2_Click(object sender, EventArgs e)
-        {
-            check_textbox();
+        int[] UFA_No = new int[2];                    
 
-            UFA_dB = Convert.ToInt16(txt5.Text);
-
-            #region  txt1.Length=2
-
-            if (txt1.Text.Length == 2)
-            {
-                int i = 0;
-                foreach (char No in txt1.Text)
-                {
-                    UFA_No[i] = No - '0';
-                    if (UFA_No[i] % 2 == 1) //when UFA_N0 is odd
-                    {
-                        //upper list pull down
-                        Cursor.Position = new Point(122, 182);
-                        Mouse.LeftClick();
-                        Thread.Sleep(400);
-                        //MessageBox.Show(UFA_No[i].ToString());
-                        if (UFA_dB == 0)
-                        {
-                            switch (UFA_No[i])
-                            {
-                                #region switch case 0 dB
-                                case 1:
-                                    //No1
-                                    Cursor.Position = new Point(122, 214);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 2:
-                                    //No2
-                                    Cursor.Position = new Point(122, 309);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 3:
-                                    //No1
-                                    Cursor.Position = new Point(122, 335);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 4:
-                                    //No4
-                                    Cursor.Position = new Point(122, 360);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 5:
-                                    //No5
-                                    Cursor.Position = new Point(122, 382);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 6:
-                                    //No1
-                                    Cursor.Position = new Point(122, 404);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 7:
-                                    //No1
-                                    Cursor.Position = new Point(122, 431);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 8:
-                                    //No1
-                                    Cursor.Position = new Point(122, 452);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 9:
-                                    //No1
-                                    Cursor.Position = new Point(122, 477);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 10:
-                                    //No1
-                                    Cursor.Position = new Point(122, 238);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 11:
-                                    //No1
-                                    Cursor.Position = new Point(122, 263);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 12:
-                                    //No1
-                                    Cursor.Position = new Point(122, 284);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                    #endregion
-                            }
-                        }
-                        else if (UFA_dB == 20)
-                        {
-                            switch (UFA_No[i])
-                            {
-                                #region switch case 20dB
-                                case 1:
-                                    //No1
-                                    Cursor.Position = new Point(122, 200);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(400);
-                                    break;
-
-                                case 2:
-                                    //No2
-                                    Cursor.Position = new Point(122, 297);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 3:
-                                    //No1
-                                    Cursor.Position = new Point(122, 320);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 4:
-                                    //No4
-                                    Cursor.Position = new Point(122, 346);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 5:
-                                    //No5
-                                    Cursor.Position = new Point(122, 370);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 6:
-                                    //No1
-                                    Cursor.Position = new Point(122, 394);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 7:
-                                    //No1
-                                    Cursor.Position = new Point(122, 418);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 8:
-                                    //No1
-                                    Cursor.Position = new Point(122, 444);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 9:
-                                    //No1
-                                    Cursor.Position = new Point(122, 467);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 10:
-                                    //No1
-                                    Cursor.Position = new Point(122, 225);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 11:
-                                    //No1
-                                    Cursor.Position = new Point(122, 249);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 12:
-                                    //No1
-                                    Cursor.Position = new Point(122, 277);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-                                    #endregion
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //lower list pull down
-                        Cursor.Position = new Point(122, 212);
-                        Mouse.LeftClick();
-
-                        if (UFA_dB == 0)
-                        {
-                            switch (UFA_No[i])
-                            {
-                                #region switch case 0dB
-                                case 1:
-                                    //No1
-                                    Cursor.Position = new Point(122, 244);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 2:
-                                    //No212_40G_Y+_1530.33_0dB                                   
-                                    Cursor.Position = new Point(122, 339);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 3:
-                                    //No1
-                                    Cursor.Position = new Point(122, 365);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 4:
-                                    //No4
-                                    Cursor.Position = new Point(122, 390);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 5:
-                                    //No5
-                                    Cursor.Position = new Point(122, 412);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 6:
-                                    //No1
-                                    Cursor.Position = new Point(122, 434);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 7:
-                                    //No1
-                                    Cursor.Position = new Point(122, 461);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 8:
-                                    //No1
-                                    Cursor.Position = new Point(122, 482);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 9:
-                                    //No1
-                                    Cursor.Position = new Point(122, 507);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 10:
-                                    //No1
-                                    Cursor.Position = new Point(122, 268);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 11:
-                                    //No1
-                                    Cursor.Position = new Point(122, 293);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 12:
-                                    //No1
-                                    Cursor.Position = new Point(122, 314);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                    #endregion
-                            }
-                        }
-                        else if (UFA_dB == 20)
-                        {
-                            switch (UFA_No[i])
-                            {
-                                #region switch case 20dB
-                                case 1:
-                                    //No1
-                                    Cursor.Position = new Point(122, 230);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(400);
-                                    break;
-
-                                case 2:
-                                    //No2
-                                    Cursor.Position = new Point(122, 327);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 3:
-                                    //No1
-                                    Cursor.Position = new Point(122, 350);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 4:
-                                    //No4
-                                    Cursor.Position = new Point(122, 376);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 5:
-                                    //No5
-                                    Cursor.Position = new Point(122, 400);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 6:
-                                    //No1
-                                    Cursor.Position = new Point(122, 424);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 7:
-                                    //No1
-                                    Cursor.Position = new Point(122, 448);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 8:
-                                    //No1
-                                    Cursor.Position = new Point(122, 474);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 9:
-                                    //No1
-                                    Cursor.Position = new Point(122, 497);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 10:
-                                    //No1
-                                    Cursor.Position = new Point(122, 255);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 11:
-                                    //No1
-                                    Cursor.Position = new Point(122, 279);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-
-                                case 12:
-                                    //No1
-                                    Cursor.Position = new Point(122, 309);
-                                    Mouse.LeftClick();
-                                    Thread.Sleep(800);
-                                    break;
-                                    #endregion
-                            }
-                        }
-                    }
-                    
-                    i++;
-                }
-            }
-
-            #endregion
-
-            #region txt1.text=910
-            if (txt1.Text=="910" && txt5.Text=="0")
-            {
-                Cursor.Position = new Point(138, 186);
-                Mouse.LeftClick();
-                Thread.Sleep(800);
-
-                Cursor.Position = new Point(138, 478);
-                Mouse.LeftClick();
-                Thread.Sleep(800);
-
-                Cursor.Position = new Point(138, 210);
-                Mouse.LeftClick();
-                Thread.Sleep(800);
-
-                Cursor.Position = new Point(138, 264);
-                Mouse.LeftClick();
-                Thread.Sleep(800);
-            }
-            else if (txt1.Text=="910" && txt5.Text == "20")
-            {
-                Cursor.Position = new Point(138, 186);
-                Mouse.LeftClick();
-                Thread.Sleep(800);
-
-                Cursor.Position = new Point(138, 468);
-                Mouse.LeftClick();
-                Thread.Sleep(800);
-
-                Cursor.Position = new Point(138, 210);
-                Mouse.LeftClick();
-                Thread.Sleep(800);
-
-                Cursor.Position = new Point(138, 254);
-                Mouse.LeftClick();
-                Thread.Sleep(800);
-            }
-            #endregion
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            check_textbox();
-
-            Cursor.Position = new Point(182, 114);
-            Mouse.LeftClick();
-            Thread.Sleep(800);
-
-            Cursor.Position = new Point(300, 114);
-            Mouse.LeftClick();
-            Thread.Sleep(800);
-
-            switch (txt4.Text)
-            {
-                case "1530.33":
-                    Cursor.Position = new Point(300, 131);
-                    Mouse.LeftClick();
-                    Thread.Sleep(800);
-                    break;
-
-                case "1550.12":
-                    Cursor.Position = new Point(300, 165);
-                    Mouse.LeftClick();
-                    Thread.Sleep(800);
-                    break;
-
-                case "1569.36":
-                    Cursor.Position = new Point(300, 192);
-                    Mouse.LeftClick();
-                    Thread.Sleep(800);
-                    break;                
-            }
-
-            Cursor.Position = new Point(362, 159);
-            Mouse.LeftClick();
-            Thread.Sleep(800);
-
-            switch (txt4.Text)
-            {
-                case "1530.33":
-                    Cursor.Position = new Point(350, 178);
-                    Mouse.LeftClick();
-                    Thread.Sleep(800);
-                    break;
-
-                case "1550.12":
-                    Cursor.Position = new Point(350, 210);
-                    Mouse.LeftClick();
-                    Thread.Sleep(800);
-                    break;
-
-                case "1569.36":
-                    Cursor.Position = new Point(350, 235);
-                    Mouse.LeftClick();
-                    Thread.Sleep(800);
-                    break;
-            }
-        }
-        
-        private void button4_Click(object sender, EventArgs e)
-        {
-            hook_Main.UnInstallHook();  //卸戴main form的掛鉤
-            
-            form = new Script_Form(selected_csv); //Creat a script form.
-            form.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            form.Location = new System.Drawing.Point(this.Right, this.Top);
-            form.Show();
-            
-        }
-               
         private void button1_Click(object sender, EventArgs e)
         {                             
             if (btn1_step_on == true)
@@ -900,30 +364,46 @@ namespace MouseClick_x01
 
             //timer2.Enabled = true;           
         }
-        
-        ListViewItem lv = new ListViewItem();
-        private void comboBox1_DropDown(object sender, EventArgs e)
+
+        private void button4_Click(object sender, EventArgs e)
         {
-            comboBox1.Items.Clear();
-            string[] files = System.IO.Directory.GetFiles(Application.StartupPath, "*.csv");
-            foreach (string file in files)
-            {
-                comboBox1.Items.Add(Path.GetFileNameWithoutExtension(file));
-            }
+            hook_Main.UnInstallHook();  //卸戴main form的掛鉤
+
+            form = new Script_Form(selected_csv); //Creat a script form.
+            form.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+            form.Location = new System.Drawing.Point(this.Right, this.Top);
+            form.Show();
+
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
+            toolStripStatusLabel2.Text = 0.ToString();
+
+            sample = new Thread(_MainFunction);
+            sample.Start();
+;
+            callback = new TimerCallback(Timer3_Tick);
+            timer3 = new System.Threading.Timer(callback, null, 0, 200);
+            //timer3.Change(0, 200);
+
             Update_datatable();
 
-            toolStripStatusLabel1.Text = "Wokring";
+            //toolStripStatusLabel1.Text = "Wokring";
             hook_Main.InstallHook("1"); //開啟掛鉤
 
             progressBar1.Value = 0;
             progressBar1.Minimum = 0;
-            progressBar1.Maximum = dt.Rows.Count;
-            progressBar1.Step = 1;   
+            //progressBar1.Maximum = dt.Rows.Count;
+            progressBar1.Step = 1;
 
+            
+
+            hook_Main.UnInstallHook();
+        }
+
+        private void _MainFunction()
+        {
             do
             {
                 foreach (DataRow dr in dt.Rows)
@@ -931,7 +411,7 @@ namespace MouseClick_x01
                     sw_string = dr[1].ToString();
                     X = dr[2].ToString();
                     Y = dr[3].ToString();
-                    
+
                     switch (sw_string)
                     {
                         case "Click":
@@ -949,25 +429,66 @@ namespace MouseClick_x01
 
                         case "WaitKey":
                             key = AC.Action_WaitKey(X, Y);
-                            pause_dr = dr;
+                            pause_No = int.Parse(dr[0].ToString());
                             hook_Main.InstallHook("1");
-                            toolStripStatusLabel1.Text = "Waiting";
+                            //toolStripStatusLabel1.Text = "Waiting";
                             return;
                     }
 
-                    progressBar1.PerformStep();
+                    //progressBar1.PerformStep();
                 }
+
             }
             while (checkBox1.Checked);
+        }
 
-            hook_Main.UnInstallHook();
+        ListViewItem lv = new ListViewItem();
 
-            toolStripStatusLabel1.Text = "Complete";
-        }               
+        private void button5_MouseDown(object sender, MouseEventArgs e)
+        {
+            timer2.Enabled = true;  //更新ProgressBar的Timer On
+        }
+
+        private void comboBox1_DropDown(object sender, EventArgs e)
+        {
+            comboBox1.Items.Clear();
+            string[] files = System.IO.Directory.GetFiles(Application.StartupPath, "*.csv");
+            foreach (string file in files)
+            {
+                comboBox1.Items.Add(Path.GetFileNameWithoutExtension(file));
+            }
+        }                
 
         private void comboBox1_SelectedValueChanged(object sender, EventArgs e)
         {
-            selected_csv = comboBox1.SelectedItem.ToString();            
+            selected_csv = comboBox1.SelectedItem.ToString();
+
+            Update_datatable();
+
+            time_spent = 0;
+
+            foreach(DataRow dr in dt.Rows)
+            {
+                sw_string = dr[1].ToString();
+                X = dr[2].ToString();
+
+                switch (sw_string)
+                {
+                    case "Click":
+                        time_spent += 0.1;
+                        break;
+
+                    case "Delay":
+                        time_spent += double.Parse(X) / 1000;
+                        break;
+
+                    case "Key":
+                        time_spent += 0.1;
+                        break;                    
+                }
+            }
+            toolStripStatusLabel1.Text = time_spent.ToString();
+            progressBar1.Maximum = Convert.ToInt32(time_spent * 5);
         }
 
         private void Update_datatable()
@@ -1023,7 +544,49 @@ namespace MouseClick_x01
         {
             return selected_csv;
         }
-    }
+
+        #region shock test condition textBox
+        private void txt2_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SendKeys.Send("{tab}");
+            }
+        }
+
+        private void txt1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SendKeys.Send("{tab}");
+            }
+        }
+
+        private void txt3_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SendKeys.Send("{tab}");
+            }
+        }
+
+        private void txt4_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SendKeys.Send("{tab}");
+            }
+        }
+
+        private void txt5_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SendKeys.Send("{tab}");
+            }
+        }
+        #endregion
+    }    
 
     static public class Mouse
     {

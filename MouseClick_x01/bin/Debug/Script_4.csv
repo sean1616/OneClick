@@ -1,5 +1,5 @@
 No.,Event,X,Y
 1,WaitKey,F5,,
-2,Click,1223,13,
-3,WaitKey,,,
-4,Click,1462,15,
+2,Click,-846,13,
+3,WaitKey,F5,,
+4,Click,-841,18,
