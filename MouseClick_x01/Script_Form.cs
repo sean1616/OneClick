@@ -243,8 +243,15 @@ namespace MouseClick_x01
         {
             capture_checkbox_status = !capture_checkbox_status;
 
-            if (capture_checkbox_status==true)
+            if (capture_checkbox_status == true)
+            {
                 hook_Main.InstallHook("1"); //開啟掛鉤
+
+                toolStripStatusLabel1.Text = "F1=Click, F2=Delay, F3=Key, F4=WaitKey";
+                toolStripStatusLabel2.Text = "";
+
+            }
+               
         }
         
         private void hook_MainKeyDown(object sender, KeyEventArgs e)
