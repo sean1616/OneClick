@@ -23,7 +23,7 @@ namespace MouseClick_x01
         System.Threading.Timer timer3;
         TimerCallback callback;
 
-        private Hocy_Hook hook_Main = new Hocy_Hook();
+        Hocy_Hook hook_Main;
         Keys key;
         bool btn1_step_on = false;
         bool Check_Close = false;
@@ -45,6 +45,8 @@ namespace MouseClick_x01
         public Form1()
         {
             InitializeComponent();
+
+            hook_Main = new Hocy_Hook();
 
             this.TopMost = true;
             this.MaximizeBox = false;
@@ -253,6 +255,7 @@ namespace MouseClick_x01
             {
                 //timer3.Change(Timeout.Infinite, Timeout.Infinite); //關閉ProgressBar的更新timer
                 timer3.Dispose();
+                
             }
                 
         }
@@ -376,30 +379,58 @@ namespace MouseClick_x01
 
         }
 
+        //創建一個委託來實現非創建控件的線程更新控件
+        delegate void AsynUpdateUI(int step);
+
         private void button5_Click(object sender, EventArgs e)
         {
             toolStripStatusLabel2.Text = 0.ToString();
 
-            sample = new Thread(_MainFunction);
-            sample.Start();
+            MainFunction mainFunction = new MainFunction(dt, checkBox_checked, AC);
+            mainFunction.TaskCallBack += Accomplish;//綁定完成任務要調用的委託
+
+            Thread thread = new Thread(new ParameterizedThreadStart(mainFunction._MainFunction));
+            thread.IsBackground = true;
+            thread.Start();
+
+            //sample = new Thread(_MainFunction);
+            //sample.Start();
 ;
-            callback = new TimerCallback(Timer3_Tick);
+            callback = new TimerCallback(Timer3_Tick);    //Update progress bar
             timer3 = new System.Threading.Timer(callback, null, 0, 200);
+            
             //timer3.Change(0, 200);
 
-            Update_datatable();
+            //Update_datatable();
 
-            //toolStripStatusLabel1.Text = "Wokring";
-            hook_Main.InstallHook("1"); //開啟掛鉤
+            //hook_Main.InstallHook("1"); //開啟掛鉤
 
-            progressBar1.Value = 0;
-            progressBar1.Minimum = 0;
+            //progressBar1.Value = 0;
+            //progressBar1.Minimum = 0;
             //progressBar1.Maximum = dt.Rows.Count;
-            progressBar1.Step = 1;
-
-            
+            //progressBar1.Step = 1;            
 
             hook_Main.UnInstallHook();
+        }
+
+        //完成任務時需要調用
+        private void Accomplish()
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new AsynUpdateUI(delegate (int s)
+                {
+                    this.progressBar1.Value = 0;
+                    //this.progressBar1.Text = this.progressBar1.Value.ToString() + "/" + this.progressBar1.Maximum.ToString();
+                    toolStripStatusLabel2.Text = 0.ToString();
+                }), 0);
+                
+            }
+            else
+            {
+                
+            }
+            
         }
 
         private void _MainFunction()
@@ -434,7 +465,7 @@ namespace MouseClick_x01
                             //toolStripStatusLabel1.Text = "Waiting";
                             return;
                     }
-
+                    
                     //progressBar1.PerformStep();
                 }
 
@@ -539,7 +570,13 @@ namespace MouseClick_x01
                 return;
             }
         }
-        
+
+        bool checkBox_checked = false;
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBox_checked = checkBox1.Checked;
+        }
+
         public string Selected_csv()
         {
             return selected_csv;
