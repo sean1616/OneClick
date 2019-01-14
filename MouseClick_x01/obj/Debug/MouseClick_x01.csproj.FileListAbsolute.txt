@@ -69,3 +69,14 @@ D:\SeanWu\Repository\MouseClick\MouseClick_x01\obj\Debug\MouseClick_x01.csproj.G
 D:\SeanWu\Repository\MouseClick\MouseClick_x01\obj\Debug\MouseClick_x01.csproj.CoreCompileInputs.cache
 D:\SeanWu\Repository\MouseClick\MouseClick_x01\obj\Debug\MouseClick_x01.exe
 D:\SeanWu\Repository\MouseClick\MouseClick_x01\obj\Debug\MouseClick_x01.pdb
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\bin\Debug\MouseClick_x01.exe.config
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\bin\Debug\MouseClick_x01.exe
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\bin\Debug\MouseClick_x01.pdb
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\MouseClick_x01.csprojResolveAssemblyReference.cache
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\MouseClick_x01.Form1.resources
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\MouseClick_x01.Properties.Resources.resources
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\MouseClick_x01.Script_Form.resources
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\MouseClick_x01.csproj.GenerateResource.cache
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\MouseClick_x01.csproj.CoreCompileInputs.cache
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\MouseClick_x01.exe
+C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\MouseClick_x01.pdb

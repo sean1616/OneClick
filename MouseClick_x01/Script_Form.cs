@@ -45,6 +45,8 @@ namespace MouseClick_x01
 
         private void Script_Form_Load(object sender, EventArgs e)
         {
+            txtBox_name.Text = selected_csv;
+
             csvpath = Application.StartupPath + @"\" + selected_csv + ".csv";
 
             dt = new DataTable();
@@ -394,6 +396,11 @@ namespace MouseClick_x01
         private void dataGridView_script_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
         {
             datascript_rowcount_changed();
+        }
+
+        private void txtBox_name_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

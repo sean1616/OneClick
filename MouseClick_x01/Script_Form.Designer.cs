@@ -38,7 +38,7 @@
             this.Click_Check = new System.Windows.Forms.CheckBox();
             this.dataGridView_script = new System.Windows.Forms.DataGridView();
             this.button5 = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtBox_name = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView_script)).BeginInit();
             this.SuspendLayout();
@@ -89,7 +89,7 @@
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(43, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(44, 17);
             this.toolStripStatusLabel1.Text = "script: ";
             // 
             // script_name_statusbar
@@ -100,7 +100,7 @@
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(22, 17);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(23, 17);
             this.toolStripStatusLabel2.Text = "---";
             // 
             // Click_Check
@@ -139,19 +139,20 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
-            // textBox1
+            // txtBox_name
             // 
-            this.textBox1.Location = new System.Drawing.Point(79, 36);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(159, 22);
-            this.textBox1.TabIndex = 10;
+            this.txtBox_name.Location = new System.Drawing.Point(89, 36);
+            this.txtBox_name.Name = "txtBox_name";
+            this.txtBox_name.Size = new System.Drawing.Size(149, 22);
+            this.txtBox_name.TabIndex = 10;
+            this.txtBox_name.TextChanged += new System.EventHandler(this.txtBox_name_TextChanged);
             // 
             // Script_Form
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(249, 532);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtBox_name);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.dataGridView_script);
             this.Controls.Add(this.Click_Check);
@@ -182,6 +183,6 @@
         private System.Windows.Forms.DataGridView dataGridView_script;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtBox_name;
     }
 }
