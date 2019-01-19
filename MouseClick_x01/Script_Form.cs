@@ -193,7 +193,7 @@ namespace MouseClick_x01
                         
             File.AppendAllText(csvpath, stringBuilder.ToString());  //Save string builder to csv
 
-            string csvpath_rename = Application.StartupPath + @"\" + "Script_" + txtBox_name.Text + ".csv"; 
+            string csvpath_rename = Application.StartupPath + @"\" + txtBox_name.Text + ".csv"; 
             File.Move(csvpath, csvpath_rename);
         }
 
