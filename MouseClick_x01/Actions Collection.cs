@@ -5,13 +5,20 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text;
 
-namespace MouseClick_x01
+namespace OneClick
 {
     public class Actions_Collection
     {
         System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
 
         bool timer_check = false;
+
+        public CancellationTokenSource tokenSource;
+
+        public Actions_Collection()
+        {
+            tokenSource = new CancellationTokenSource();
+        }
 
         private bool Set_Timer(int interval)
         {
@@ -33,18 +40,50 @@ namespace MouseClick_x01
             Thread.Sleep(50);
         }
 
-        public void Action_Delay(string t)
+        public void Action_RightClick(Point p)
         {
+            Point point = Cursor.Position;
+
+            Cursor.Position = new Point(p.X, p.Y);
+            Mouse.RightClick();
+
+            Cursor.Position = point; //Back to origin position
+
+            Thread.Sleep(50);
+        }
+        
+        public async Task<bool> Action_Delay(string t, string unit)
+        {
+            TimeSpan ts = new TimeSpan(0, 0, 0);
             int delay_time;
-            
+
             if (int.TryParse(t, out delay_time))
             {
-                TimeSpan ts = new TimeSpan(0, 0, 0, delay_time/1000, delay_time%1000);
-                Task.Delay(ts).Wait();
-                //Thread.Sleep(delay_time);
-            }
-        }
+                switch (unit)
+                {
+                    case "ms":
+                        ts = new TimeSpan(0, 0, 0, delay_time / 1000, delay_time % 1000);
+                        break;
 
+                    case "s":
+                        ts = new TimeSpan(0, 0, delay_time);
+                        break;
+
+                    case "m":
+                        ts = new TimeSpan(0, delay_time, 0);
+                        break;
+
+                    case "hr":
+                        ts = new TimeSpan(delay_time, 0, 0);
+                        break;
+                }
+                await Task.Delay(ts, tokenSource.Token);
+
+                return true;
+            }
+            else return false;
+        }
+                
         public void Action_Key(string key_X, string key_Y)
         {
             StringBuilder key = new StringBuilder();
@@ -97,23 +136,45 @@ namespace MouseClick_x01
 
             key.Append(key_X);
             key.Append(key_Y);
+            string keyString = key.ToString();
 
+            if (keyString.Contains("+") || keyString.Contains("-"))
+            {
+                char[] list_char = keyString.ToCharArray();
+
+                keyString = "";
+                foreach (char c in list_char)
+                {
+                    if (c == '+' || c == '-')
+                    {
+                        keyString += "{";
+                        keyString += c;
+                        keyString += "}";
+                    }
+                    else
+                    {
+                        keyString += c;
+                    }
+                }
+            }
             try
             {
-                SendKeys.SendWait(key.ToString());
+                SendKeys.SendWait(keyString);
             }
             catch
             {
                 MessageBox.Show("Somethin wrong when send the key");
             }
+
         }
 
         public Keys Action_WaitKey(string key_X, string key_Y)
         {
+            key_X = key_X.ToUpper();
             Keys k;
             if (Enum.TryParse<Keys>(key_X, out k))
             {
-                
+
             }
             return k;
         }

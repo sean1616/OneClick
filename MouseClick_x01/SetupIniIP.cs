@@ -14,7 +14,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 
 
-namespace MouseClick_x01
+namespace OneClick
 {
     public class SetupIniIP
     {

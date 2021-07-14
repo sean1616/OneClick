@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MouseClick_x01
+namespace OneClick
 {
     class Win32API
     {

@@ -8,18 +8,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 using System.Timers;
 using System.Threading;
 using System.Runtime.InteropServices;
 
 
-namespace MouseClick_x01
+namespace OneClick
 {
-    public partial class Script_Form : Form
+    public partial class Script_Form : MetroFramework.Forms.MetroForm
     {
         SetupIniIP ini;
         Actions_Collection AC;
+
+        System.Windows.Forms.Timer timer_cursor;
 
         DataGridViewRow pause_dg = new DataGridViewRow();
         DataTable dt;
@@ -29,10 +30,18 @@ namespace MouseClick_x01
         bool capture_checkbox_status = false;
         bool continued_check = false;
         Keys key;
+        Form1 form_main;
 
-        public Script_Form(string selected_csv)
+        DateTime dtn;
+        System.Threading.Timer timer_TimeSpan;
+
+        int lines_count = 0;
+
+        public Script_Form(Form1 form_main, string selected_csv)
         {
             InitializeComponent();
+
+            this.form_main = form_main;
 
             AC = new Actions_Collection();
 
@@ -41,7 +50,14 @@ namespace MouseClick_x01
             this.TopMost = true;           
 
             this.hook_Main.OnKeyDown += new KeyEventHandler(hook_MainKeyDown);
+
+            //System.timer.timer
+            timer_cursor = new System.Windows.Forms.Timer();
+            timer_cursor.Interval = 100;
+            timer_cursor.Tick += timer_cursor_Tick;
         }
+
+        
 
         private void Script_Form_Load(object sender, EventArgs e)
         {
@@ -53,7 +69,9 @@ namespace MouseClick_x01
             try
             {
                 string[] lines = File.ReadAllLines(csvpath);
-                
+
+                lines_count = lines.Count();
+
                 if (lines.Length > 0)
                 {
                     //first line to create header
@@ -101,47 +119,26 @@ namespace MouseClick_x01
 
             //Set form size
             dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
-            this.Height = dataGridView_script.Height + 127;
+            //this.Height = dataGridView_script.Height + 127;
+
+            this.Size = new Size(Size.Width + 20, lines_count * 24 + 205);   //Resize form by the number of data rows, 1 line = 24 heigh
         }
 
-        //New button
-        private void button1_Click(object sender, EventArgs e)
+        private void timer_cursor_Tick(object Sender, EventArgs e)
         {
-            int scriptIndex = 1;
+            Point point = Cursor.Position;
 
-            StringBuilder csvcontent = new StringBuilder();  //動態字串
-
-            //Add grid header
-            csvcontent.Append("No.,");
-            csvcontent.Append("Event,");
-            csvcontent.Append("X,");
-            csvcontent.Append("Y");
-
-            csvpath = Application.StartupPath + @"\" + "Script_" + scriptIndex.ToString() + ".csv";
-
-            for (int i = 1; i <= 30; i++)
-            {
-                if (!File.Exists(csvpath))
-                {
-                    File.AppendAllText(csvpath, csvcontent.ToString());
-                    return;
-                }
-                else
-                    scriptIndex++;
-                    csvpath = Application.StartupPath + @"\" + "Script_" + scriptIndex.ToString() + ".csv";
-            }          
+            txt_ms_X.Text = point.X.ToString();
+            txt_ms_Y.Text = point.Y.ToString();
         }
+
+       
+
+        
 
         private void button2_Click(object sender, EventArgs e)
         {
-            DataRow dr = dt.NewRow();
-            dt.Rows.InsertAt(dr, dataGridView_script.CurrentCell.RowIndex + 1);
-            
-            int i = 1;
-            foreach(DataRow dataRow in dt.Rows)
-            {
-                dataRow[0] = i++;
-            }
+           
         }
 
         //Delete button
@@ -197,36 +194,80 @@ namespace MouseClick_x01
             File.Move(csvpath, csvpath_rename);
         }
 
-        //GO button
-        private void button5_Click(object sender, EventArgs e)
+        private void _do(object state)
         {
-            foreach(DataGridViewRow dg in dataGridView_script.Rows)
+            this.BeginInvoke(new setLable2(setLable));            
+        }
+
+        delegate void setLable2();
+        private void setLable()
+        {
+            if (label_timespan != null)
+                label_timespan.Text = Math.Round((DateTime.Now - dtn).TotalSeconds, 1).ToString();
+        }
+
+        //GO button
+        private async void btn_GO_Click(object sender, EventArgs e)
+        {
+            if (btn_go.Text.Equals("Go"))
             {
-                string sw_string = dg.Cells[1].Value.ToString();
-                string X = dg.Cells[2].Value.ToString();
-                string Y = dg.Cells[3].Value.ToString();
-                switch (sw_string)
+                btn_go.Text = "Stop";
+
+                dtn = DateTime.Now;
+
+                //System.threading.timer            
+                TimerCallback callback = new TimerCallback(_do);  //宣告timer要做什麼事.要做什麼事呢?要做_do的事
+                timer_TimeSpan = new System.Threading.Timer(callback, null, 0, 1000);  //Timer start
+
+                try
                 {
-                    case "Click":
-                        Point p = new Point(Convert.ToInt32(dg.Cells[2].Value), Convert.ToInt32(dg.Cells[3].Value));
-                        AC.Action_Click(p);
-                        break;
+                    foreach (DataGridViewRow dg in dataGridView_script.Rows)
+                    {
+                        string sw_string = dg.Cells[1].Value.ToString();
+                        string X = dg.Cells[2].Value.ToString();
+                        string Y = dg.Cells[3].Value.ToString();
+                        switch (sw_string)
+                        {
+                            case "Click":
+                                Point p = new Point(Convert.ToInt32(dg.Cells[2].Value), Convert.ToInt32(dg.Cells[3].Value));
+                                AC.Action_Click(p);
+                                break;
 
-                    case "Delay":
-                        AC.Action_Delay(X);
-                        break;
+                            case "RClick":
+                                p = new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
+                                AC.Action_RightClick(p);
+                                break;
 
-                    case "Key":
-                        AC.Action_Key(X, Y);
-                        break;
+                            case "Delay":
+                                AC.tokenSource = new CancellationTokenSource();
+                                await AC.Action_Delay(X, Y);
+                                break;
 
-                    case "WaitKey":
-                        key = AC.Action_WaitKey(X, Y);
-                        pause_dg = dg;
-                        hook_Main.InstallHook("1");
-                        return;
-                }               
-            }            
+                            case "Key":
+                                AC.Action_Key(X, Y);
+                                break;
+
+                            case "WaitKey":
+                                key = AC.Action_WaitKey(X, Y);
+                                pause_dg = dg;
+                                hook_Main.InstallHook("1");
+                                return;
+                        }
+                    }
+                }
+                catch 
+                {
+                    //MessageBox.Show(ex.StackTrace.ToString());
+                }
+
+                timer_TimeSpan.Dispose();  //Timer stop    
+
+                btn_go.Text = "Go";
+            }
+            else
+            {
+                AC.tokenSource.Cancel();
+            }
         }
 
         private void datascript_rowcount_changed()
@@ -252,18 +293,21 @@ namespace MouseClick_x01
             {
                 hook_Main.InstallHook("1"); //開啟掛鉤
 
-                toolStripStatusLabel1.Text = "F1=Click, F2=Delay, F3=Key, F4=WaitKey";
-                toolStripStatusLabel2.Text = "";
-
+                timer_cursor.Start();
             }
-               
+            else
+                timer_cursor.Stop();   
         }
         
-        private void hook_MainKeyDown(object sender, KeyEventArgs e)
-        {
+        private async void hook_MainKeyDown(object sender, KeyEventArgs e)
+        {            
             if (e.KeyCode == Keys.F1 && capture_checkbox_status == true)
             {
                 Write_Click(e);
+            }
+            else if (e.KeyCode == Keys.F5 && capture_checkbox_status == true)
+            {
+                Write_RClick(e);
             }
             else if (e.KeyCode == Keys.F2 && capture_checkbox_status == true)
             {
@@ -278,9 +322,7 @@ namespace MouseClick_x01
                 Write_WaitKey();
             }
             else if (e.KeyCode == key)
-            {                
-                //MessageBox.Show("Keyin");
-                
+            {                                
                 foreach (DataGridViewRow dg in dataGridView_script.Rows)
                 {
                     if (dg != pause_dg && continued_check!=true)
@@ -304,7 +346,7 @@ namespace MouseClick_x01
                                 break;
 
                             case "Delay":
-                                AC.Action_Delay(X);
+                                await AC.Action_Delay(X,Y);
                                 break;
 
                             case "Key":
@@ -323,7 +365,9 @@ namespace MouseClick_x01
 
             //Set form size
             dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
-            this.Height = dataGridView_script.Height + 127;
+            //this.Height = dataGridView_script.Height + 127;
+            
+            this.Size = new Size(Size.Width, dataGridView_script.RowCount * 24 + 205);
         }
 
         #region Functions Collection
@@ -332,6 +376,15 @@ namespace MouseClick_x01
             Point point = Cursor.Position;
             
             string[] axis = new string[] { (dt.Rows.Count+1).ToString(), "Click", point.X.ToString(), point.Y.ToString() };
+
+            Update_Table(axis);
+        }
+
+        private void Write_RClick(KeyEventArgs e)
+        {
+            Point point = Cursor.Position;
+
+            string[] axis = new string[] { (dt.Rows.Count + 1).ToString(), "RClick", point.X.ToString(), point.Y.ToString() };
 
             Update_Table(axis);
         }
@@ -373,7 +426,11 @@ namespace MouseClick_x01
 
             dataGridView_script.DataSource = dt;
 
-            dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            
+
+            //dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+
+            //this.Size = new Size(this.Size.Width, this.Size.Height + 20);
         }
         #endregion
 
@@ -405,6 +462,79 @@ namespace MouseClick_x01
         {
 
         }
+
+        private void Script_Form_MouseMove(object sender, MouseEventArgs e)
+        {
+          
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            MessageBox.Show("F1=Click, \nF2=Delay(ms, s, m, hr), \nF3=Key, \nF4=WaitKey, \nF5=RClick");
+        }
+
+        private void Script_Form_Resize(object sender, EventArgs e)
+        {
+            //MessageBox.Show(this.Size.Height.ToString());
+        }
+
+        Thread thread;
+        private void Script_Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            AC.tokenSource.Cancel();
+            thread = new Thread(new ParameterizedThreadStart(form_main.Update_datatable));  //執行腳本的執行緒
+            thread.IsBackground = true;
+            thread.Start();
+        }
+
+        //New Button
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            int scriptIndex = 1;
+
+            StringBuilder csvcontent = new StringBuilder();  //動態字串
+
+            //Add grid header
+            csvcontent.Append("No.,");
+            csvcontent.Append("Event,");
+            csvcontent.Append("X,");
+            csvcontent.Append("Y");
+
+            csvpath = Application.StartupPath + @"\" + "Script_" + scriptIndex.ToString() + ".csv";
+
+            for (int i = 1; i <= 30; i++)
+            {
+                if (!File.Exists(csvpath))
+                {
+                    File.AppendAllText(csvpath, csvcontent.ToString());
+                    return;
+                }
+                else
+                    scriptIndex++;
+                csvpath = Application.StartupPath + @"\" + "Script_" + scriptIndex.ToString() + ".csv";
+            }
+        }
+
+        //Insert Button
+        private void metroButton2_Click(object sender, EventArgs e)
+        {
+            DataRow dr = dt.NewRow();
+            if (dataGridView_script.CurrentCell != null)
+                dt.Rows.InsertAt(dr, dataGridView_script.CurrentCell.RowIndex + 1);
+
+            int i = 1;
+            foreach (DataRow dataRow in dt.Rows)
+            {
+                dataRow[0] = i++;
+            }
+        }
+
+        
     }
 
 

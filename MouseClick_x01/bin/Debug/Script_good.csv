@@ -1,9 +1,0 @@
-No.,Event,X,Y
-1,Delay,10000,ms,
-2,Delay,10000,ms,
-3,Delay,10000,ms,
-4,Delay,10000,ms,
-5,Delay,10000,ms,
-6,Click,1360,905,
-7,Delay,5000,ms,
-8,Click,1365,913,

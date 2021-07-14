@@ -13,15 +13,19 @@ using System.Timers;
 using System.Threading;
 using System.Runtime.InteropServices;
 
-namespace MouseClick_x01
+namespace OneClick
 {
-    public partial class Form1 : Form
+    public partial class Form1 : MetroFramework.Forms.MetroForm
     {
         Thread sample;
+
+        public static bool chechBox_Repeat = false;
 
         System.Windows.Forms.Timer timer1, timer2;
         System.Threading.Timer timer3;
         TimerCallback callback;
+
+        System.Windows.Forms.Timer timer_timespan;
 
         Hocy_Hook hook_Main;
         Keys key;
@@ -35,7 +39,7 @@ namespace MouseClick_x01
         DataTable dt;
         Script_Form form;
         Actions_Collection AC;
-
+        
         public List<string> script_filename = new List<string>();
         public List<string> script_section = new List<string>();
         string csv_path, filename;
@@ -50,7 +54,7 @@ namespace MouseClick_x01
 
             this.TopMost = true;
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
+            //this.MinimizeBox = false;
 
             AC = new Actions_Collection();
 
@@ -58,14 +62,10 @@ namespace MouseClick_x01
             script_filename.Add("MouseClick_script_1.ini");
                         
             timer1 = new System.Windows.Forms.Timer();
-            timer2 = new System.Windows.Forms.Timer();
-                                                           
-            //timer1.Interval = 200;
-            //timer1.Tick += Timer1_Tick;
-            //timer1.Enabled = true;
+            timer_timespan = new System.Windows.Forms.Timer();
 
-            timer2.Interval = 200;
-            timer2.Tick += Timer2_Tick;
+            timer_timespan.Interval = 1000;
+            timer_timespan.Tick += Timer_timespan_Tick;
 
             //this.hook_Main.OnMouseActivity += new MouseEventHandler(hook_MainMouseMove);
             this.hook_Main.OnKeyDown += new KeyEventHandler(hook_MainKeyDown);
@@ -73,7 +73,7 @@ namespace MouseClick_x01
             //this.hook_Main.OnKeyPress += new KeyPressEventHandler(hook_MainKeyPress);
             //this.hook_Main.OnKeyUp += new KeyEventHandler(hook_MainKeyUp);
 
-            hook_Main.InstallHook("1");
+            //hook_Main.InstallHook("1");
                         
             comboBox1.Items.Clear();
             string[] files = System.IO.Directory.GetFiles(Application.StartupPath, "*.csv");
@@ -92,7 +92,10 @@ namespace MouseClick_x01
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Update_datatable();
+            //Update_datatable();
+
+            callback = new TimerCallback(Timer_ProgressBar_Tick);    //Update progress bar
+            timer3 = new System.Threading.Timer(callback, null, 0, 100);
         }
 
         private void LogWrite(KeyEventArgs e)
@@ -111,7 +114,7 @@ namespace MouseClick_x01
             Mouse.LeftClick();            
         }
 
-        private void hook_MainKeyDown(object sender, KeyEventArgs e)
+        private async void hook_MainKeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F1 && btn1_step_on==true)
             {
@@ -121,7 +124,6 @@ namespace MouseClick_x01
             else if (e.KeyCode == Keys.F2)
             {
                 btn1_step_on = false;
-                MessageBox.Show("1234");
             }
             else if (e.KeyCode == Keys.Escape)  //ESC終止repeat
             {
@@ -136,8 +138,7 @@ namespace MouseClick_x01
             }
             else if (e.KeyCode == key)
             {
-                //MessageBox.Show("Keyin");
-                toolStripStatusLabel1.Text = "Working";
+                //Label_Status.Text = "Working";
 
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -158,7 +159,7 @@ namespace MouseClick_x01
                                 break;
 
                             case "Delay":
-                                AC.Action_Delay(X);
+                                await AC.Action_Delay(X,Y);
                                 break;
 
                             case "Key":
@@ -168,33 +169,23 @@ namespace MouseClick_x01
                             case "WaitKey":
                                 key = AC.Action_WaitKey(X, Y);
                                 pause_No = int.Parse(dr[0].ToString());
-                                toolStripStatusLabel1.Text = "Waiting";
                                 return;
                         }
-
                     }
                 }
                 hook_Main.UnInstallHook();
-
-                toolStripStatusLabel1.Text = "Complete";
             }
-
-
         }
 
         private void hook_MainKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == Keys.LControlKey)
-            {
-                Check_Close = false;
-            }
+            if (e.KeyData == Keys.LControlKey) { Check_Close = false; }
         }
 
         private void hook_MainKeyPress(object sender, KeyPressEventArgs e)
         {
-            if (btn1_step_on == false)
-                return;
-            //LogWrite(e);
+            if (btn1_step_on == false) return;
+
             btn1_step_on = false;
         }
 
@@ -227,49 +218,25 @@ namespace MouseClick_x01
                             AC.Action_Key(X, Y);
                             break;
                     }
-
-                    progressBar1.PerformStep();
+                    ProgressBar_Main.PerformStep();
                 }
             }
-            while (checkBox1.Checked);
-
-            
+            while (checkBox1.Checked);            
         }
-
-        private void Timer2_Tick(object Sender, EventArgs e)
+                
+                
+        private void Timer_ProgressBar_Tick(object state)
+        {                        
+            this.BeginInvoke(new UpdateProgressBar(UpdateProgressBarValue));
+        }
+        delegate void UpdateProgressBar();
+        private void UpdateProgressBarValue()
         {
-            double tt = double.Parse(toolStripStatusLabel2.Text) + 0.2;
-            //toolStripStatusLabel2.Text = (tt).ToString();
-
-            if (tt >= time_spent)
-                timer2.Enabled = false;  //關閉ProgressBar的更新timer
-        }
-                
-        private void Timer3_Tick(object state)
-        {            
-            tt = double.Parse(toolStripStatusLabel2.Text) + 0.2;
-
-            this.BeginInvoke(new setLable2(setLabel2));
-
-            if (tt >= time_spent)
+            if (progressMax_TimeSpan > 100)
             {
-                //timer3.Change(Timeout.Infinite, Timeout.Infinite); //關閉ProgressBar的更新timer
-                timer3.Dispose();
-                
-            }
-                
-        }
-        delegate void setLable2();
-        private void setLabel2()
-        {
-            progressBar1.PerformStep();
-            if (tt > time_spent)
-            {
-                toolStripStatusLabel2.Text = time_spent.ToString();
-                progressBar1.Value = progressBar1.Maximum;
-            }                          
-            else
-                toolStripStatusLabel2.Text = (tt).ToString();
+                ProgressBar_Main.Step = 100 / (progressMax_TimeSpan / 100);
+                ProgressBar_Main.PerformStep();
+            }                    
         }                
                 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -287,130 +254,94 @@ namespace MouseClick_x01
                 if (sample.IsAlive)
                     sample.Abort();
             }
-        }                
+        }              
 
-        private void check_textbox()
-        {
-            filenameBox = new string[] { txt1.Text, txt2.Text, txt3.Text, txt4.Text, txt5.Text };
-
-            foreach (string txt in filenameBox)
-            {
-                if (string.IsNullOrEmpty(txt))
-                {
-                    MessageBox.Show("Textbox empty");
-                    return;
-                }
-            }
-        }
-
-        int[] UFA_No = new int[2];                    
-
-        private void button1_Click(object sender, EventArgs e)
-        {                             
-            if (btn1_step_on == true)
-            {
-                MessageBox.Show("Press F1(F2) to continue(cancel).");
-                return;
-            }    
-
-            filenameBox = new string[] { txt1.Text, txt2.Text, txt3.Text, txt4.Text, txt5.Text };
-
-            foreach (string txt in filenameBox)
-            {
-                if (string.IsNullOrEmpty(txt))
-                {
-                    MessageBox.Show("Textbox empty");
-                    return;
-                }
-                   
-            }
-
-            //hook start
-            hook_Main.InstallHook("1");
-
-            //Action 0
-            Cursor.Position = new Point(705, 52);
-            Mouse.LeftClick();
-            Thread.Sleep(5000);
-
-            //Action 1
-            Cursor.Position = new Point(1508, 50);
-            Mouse.LeftClick();
-            Thread.Sleep(500);
-
-            //Action 2
-            Cursor.Position = new Point(1404, 220);
-            Mouse.LeftClick();
-            Thread.Sleep(500);
-
-            //Action 3
-            Cursor.Position = new Point(1000, 240);
-            Mouse.LeftClick();
-            Thread.Sleep(500);
-
-            //Action 4
-            Cursor.Position = new Point(746, 518);
-            Mouse.LeftClick();
-            Thread.Sleep(500);
-
-            //Action 5
-            Cursor.Position = new Point(660, 560);
-            Mouse.LeftClick();
-            Thread.Sleep(500);
-
-            //Action 6
-            filename = txt1.Text + "_" + txt2.Text + "G_" + txt3.Text + "_" + txt4.Text + "_" + txt5.Text + "dB";
-            Clipboard.SetText(filename);
-            SendKeys.Send("^{V}");
-                            
-            btn1_step_on = true;
-
-            //timer2.Enabled = true;           
-        }
+        int[] UFA_No = new int[2];    
 
         private void button4_Click(object sender, EventArgs e)
         {
             hook_Main.UnInstallHook();  //卸戴main form的掛鉤
 
-            form = new Script_Form(selected_csv); //Creat a script form.
-            form.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-            form.Location = new System.Drawing.Point(this.Right, this.Top);
-            form.Show();
+            if (form == null || form.Text == "")
+            {
+                form = new Script_Form(this, selected_csv); //Creat a script form.
+                form.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
+                form.Location = new System.Drawing.Point(this.Right, this.Top);
+                form.Show();
+            }
+            else if (CheckOpened(form.Text))
+            {
+                form.WindowState = FormWindowState.Normal;
+                form.Show();
+                form.Focus();
+            }            
+        }
 
+        private bool CheckOpened(string frm_name)
+        {
+            FormCollection fc = Application.OpenForms;
+
+            foreach(Form frm in fc)
+            {
+                if (frm.Text == frm_name) return true;
+            }
+            return false;
         }
 
         //創建一個委託來實現非創建控件的線程更新控件
         delegate void AsynUpdateUI(int step);
 
-        private void button5_Click(object sender, EventArgs e)
+        Thread thread;
+        int progressMax_TimeSpan = 0;
+        MainFunction mainFunction;
+        DateTime dtn;
+        
+        private void btn_Go_Click(object sender, EventArgs e)
         {
-            toolStripStatusLabel2.Text = 0.ToString();
+            if (btn_Go.Text.Equals("Go"))
+            {
+                btn_Go.Text = "Stop";
 
-            MainFunction mainFunction = new MainFunction(dt, checkBox_checked, AC);
-            mainFunction.TaskCallBack += Accomplish;//綁定完成任務要調用的委託
+                label_timespan.Text = "0";
+                dtn = DateTime.Now;
 
-            Thread thread = new Thread(new ParameterizedThreadStart(mainFunction._MainFunction));
-            thread.IsBackground = true;
-            thread.Start();
+                timer_timespan.Start();
 
-            //sample = new Thread(_MainFunction);
-            //sample.Start();
-;
-            callback = new TimerCallback(Timer3_Tick);    //Update progress bar
-            timer3 = new System.Threading.Timer(callback, null, 0, 200);
+                ProgressBar_Main.Value = 0;
 
-            //timer3.Change(0, 200);
+                mainFunction = new MainFunction(dt, checkBox_checked);
 
-            //Update_datatable();
+                mainFunction.AC.tokenSource = new CancellationTokenSource();
 
-            //hook_Main.InstallHook("1"); //開啟掛鉤
+                dt = mainFunction.LoadScripTable(selected_csv);
+                progressMax_TimeSpan = (int)mainFunction.TimeSpan_Calculate(dt);
 
-            //progressBar1.Value = 0;
-            //progressBar1.Minimum = 0;
-            //progressBar1.Maximum = dt.Rows.Count;
-            //progressBar1.Step = 1;            
+                mainFunction.TaskCallBack += Accomplish;//綁定完成任務要調用的委託
 
-            hook_Main.UnInstallHook();
+                //mainFunction._MainFunction();
+
+                thread = new Thread(mainFunction._MainFunction);  //執行腳本的執行緒
+                thread.IsBackground = true;
+                thread.Start();
+
+                //hook_Main.UnInstallHook();
+
+                //timer_timespan.Stop();
+                //btn_Go.Text = "Go";
+            }
+            else
+            {
+                mainFunction.AC.tokenSource.Cancel();
+                thread.Abort();
+                btn_Go.Text = "Go";
+                timer_timespan.Stop();
+            }
+        }
+
+        private void Timer_timespan_Tick(object sender, EventArgs e)
+        {
+            if (label_timespan != null)
+                label_timespan.Text = Math.Round((DateTime.Now - dtn).TotalSeconds, 1).ToString();
         }
 
         //完成任務時需要調用
@@ -420,58 +351,48 @@ namespace MouseClick_x01
             {
                 this.Invoke(new AsynUpdateUI(delegate (int s)
                 {
-                    this.progressBar1.Value = 0;
-                    //this.progressBar1.Text = this.progressBar1.Value.ToString() + "/" + this.progressBar1.Maximum.ToString();
-                    toolStripStatusLabel2.Text = 0.ToString();
+                    timer_timespan.Stop();
+                    btn_Go.Text = "Go";
                 }), 0);
-                
-            }
-            else
-            {
-                
-            }
-            
+            }                    
         }
 
-        private void _MainFunction()
-        {
-            do
-            {
-                foreach (DataRow dr in dt.Rows)
-                {
-                    sw_string = dr[1].ToString();
-                    X = dr[2].ToString();
-                    Y = dr[3].ToString();
+        //private async void _MainFunction()
+        //{
+        //    do
+        //    {
+        //        foreach (DataRow dr in dt.Rows)
+        //        {
+        //            sw_string = dr[1].ToString();
+        //            X = dr[2].ToString();
+        //            Y = dr[3].ToString();
 
-                    switch (sw_string)
-                    {
-                        case "Click":
-                            Point p = new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
-                            AC.Action_Click(p);
-                            break;
+        //            switch (sw_string)
+        //            {
+        //                case "Click":
+        //                    Point p = new Point(Convert.ToInt32(X), Convert.ToInt32(Y));
+        //                    AC.Action_Click(p);
+        //                    break;
 
-                        case "Delay":
-                            AC.Action_Delay(X);
-                            break;
+        //                case "Delay":
+        //                    await AC.Action_Delay(X,Y);
+        //                    break;
 
-                        case "Key":
-                            AC.Action_Key(X, Y);
-                            break;
+        //                case "Key":
+        //                    AC.Action_Key(X, Y);
+        //                    break;
 
-                        case "WaitKey":
-                            key = AC.Action_WaitKey(X, Y);
-                            pause_No = int.Parse(dr[0].ToString());
-                            hook_Main.InstallHook("1");
-                            //toolStripStatusLabel1.Text = "Waiting";
-                            return;
-                    }
-                    
-                    //progressBar1.PerformStep();
-                }
+        //                case "WaitKey":
+        //                    key = AC.Action_WaitKey(X, Y);
+        //                    pause_No = int.Parse(dr[0].ToString());
+        //                    hook_Main.InstallHook("1");
+        //                    return;
+        //            }
+        //        }
 
-            }
-            while (checkBox1.Checked);
-        }
+        //    }
+        //    while (checkBox1.Checked);
+        //}
 
         ListViewItem lv = new ListViewItem();
 
@@ -494,7 +415,8 @@ namespace MouseClick_x01
         {
             selected_csv = comboBox1.SelectedItem.ToString();
 
-            Update_datatable();
+            object obj = new object();
+            Update_datatable(obj);
 
             time_spent = 0;
 
@@ -518,11 +440,9 @@ namespace MouseClick_x01
                         break;                    
                 }
             }
-            toolStripStatusLabel1.Text = time_spent.ToString();
-            progressBar1.Maximum = Convert.ToInt32(time_spent * 5);
         }
 
-        private void Update_datatable()
+        public void Update_datatable(object obj)
         {
             csv_path = Application.StartupPath + @"\" + selected_csv + ".csv";
 
@@ -574,9 +494,10 @@ namespace MouseClick_x01
         bool checkBox_checked = false;
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox_checked = checkBox1.Checked;
+            //checkBox_checked = checkBox1.Checked;
+            chechBox_Repeat = checkBox1.Checked;
         }
-
+               
         public string Selected_csv()
         {
             return selected_csv;
@@ -703,6 +624,45 @@ namespace MouseClick_x01
             KEYUP = 2,
             UNICODE = 4,
             SCANCODE = 8
+        }
+
+        static public void RightDown()
+        {
+            INPUT rightdown = new INPUT();
+
+            rightdown.dwType = 0;
+            rightdown.mi = new MOUSEINPUT();
+            rightdown.mi.dwExtraInfo = IntPtr.Zero;
+            rightdown.mi.dx = 0;
+            rightdown.mi.dy = 0;
+            rightdown.mi.time = 0;
+            rightdown.mi.mouseData = 0;
+            rightdown.mi.dwFlags = MOUSEFLAG.RIGHTDOWN;
+
+            SendInput(1, ref rightdown, Marshal.SizeOf(typeof(INPUT)));
+        }
+
+        static public void RightUp()
+        {
+            INPUT rightup = new INPUT();
+
+            rightup.dwType = 0;
+            rightup.mi = new MOUSEINPUT();
+            rightup.mi.dwExtraInfo = IntPtr.Zero;
+            rightup.mi.dx = 0;
+            rightup.mi.dy = 0;
+            rightup.mi.time = 0;
+            rightup.mi.mouseData = 0;
+            rightup.mi.dwFlags = MOUSEFLAG.RIGHTUP;
+
+            SendInput(1, ref rightup, Marshal.SizeOf(typeof(INPUT)));
+        }
+
+        static public void RightClick()
+        {
+            RightDown();
+            Thread.Sleep(20);
+            RightUp();
         }
 
         static public void LeftDown()

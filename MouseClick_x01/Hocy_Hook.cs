@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Reflection;
 
-namespace MouseClick_x01
+namespace OneClick
 {
     class Hocy_Hook
     {
@@ -259,7 +259,6 @@ namespace MouseClick_x01
            //pInstance = (IntPtr)4194304;
            // IntPtr pInstanc2 = Marshal.GetHINSTANCE(Assembly.GetExecutingAssembly());
            // Assembly.GetExecutingAssembly().GetModules()[0]
-			// 假如没有安装鼠标钩子
 			if ( this.m_pMouseHook == IntPtr.Zero )
 			{
 				this.m_MouseHookProcedure = new HookProc( this.MouseHookProc );
@@ -285,7 +284,6 @@ namespace MouseClick_x01
 		}
 
 		/// <summary>
-		/// 卸载钩子
 		/// </summary>
 		/// <returns></returns>
 		public bool UnInstallHook()
@@ -305,7 +303,7 @@ namespace MouseClick_x01
 			return result;
 		}
 
-		#endregion 公共方法
+		#endregion
 
 		#region 构造函数
 

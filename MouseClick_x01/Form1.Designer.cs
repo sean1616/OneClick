@@ -1,4 +1,4 @@
-﻿namespace MouseClick_x01
+﻿namespace OneClick
 {
     partial class Form1
     {
@@ -29,192 +29,110 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.button1 = new System.Windows.Forms.Button();
-            this.txt1 = new System.Windows.Forms.TextBox();
-            this.txt2 = new System.Windows.Forms.TextBox();
-            this.txt3 = new System.Windows.Forms.TextBox();
-            this.txt4 = new System.Windows.Forms.TextBox();
-            this.txt5 = new System.Windows.Forms.TextBox();
-            this.button4 = new System.Windows.Forms.Button();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.progressBar1 = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.Label();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.Label();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.Label();
-            this.statusStrip1.SuspendLayout();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
+            this.btn_Go = new MetroFramework.Controls.MetroButton();
+            this.comboBox1 = new MetroFramework.Controls.MetroComboBox();
+            this.checkBox1 = new MetroFramework.Controls.MetroCheckBox();
+            this.metroToolTip1 = new MetroFramework.Components.MetroToolTip();
+            this.ProgressBar_Main = new MetroFramework.Controls.MetroProgressBar();
+            this.label_1 = new System.Windows.Forms.Label();
+            this.label_timespan = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // button1
+            // metroButton1
             // 
-            this.button1.Location = new System.Drawing.Point(13, 64);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 27);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "GO";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.metroButton1.Location = new System.Drawing.Point(21, 105);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(59, 23);
+            this.metroButton1.TabIndex = 36;
+            this.metroButton1.Text = "Setting";
+            this.metroButton1.Click += new System.EventHandler(this.button4_Click);
             // 
-            // txt1
+            // btn_Go
             // 
-            this.txt1.Location = new System.Drawing.Point(13, 38);
-            this.txt1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt1.Name = "txt1";
-            this.txt1.Size = new System.Drawing.Size(36, 22);
-            this.txt1.TabIndex = 2;
-            this.txt1.Text = "12";
-            this.txt1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt1_KeyPress);
-            // 
-            // txt2
-            // 
-            this.txt2.Location = new System.Drawing.Point(56, 38);
-            this.txt2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt2.Name = "txt2";
-            this.txt2.Size = new System.Drawing.Size(24, 22);
-            this.txt2.TabIndex = 5;
-            this.txt2.Text = "40";
-            this.txt2.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt2_KeyPress);
-            // 
-            // txt3
-            // 
-            this.txt3.Location = new System.Drawing.Point(87, 38);
-            this.txt3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt3.Name = "txt3";
-            this.txt3.Size = new System.Drawing.Size(26, 22);
-            this.txt3.TabIndex = 21;
-            this.txt3.Text = "Y+";
-            this.txt3.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt3_KeyPress);
-            // 
-            // txt4
-            // 
-            this.txt4.Location = new System.Drawing.Point(120, 38);
-            this.txt4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt4.Name = "txt4";
-            this.txt4.Size = new System.Drawing.Size(60, 22);
-            this.txt4.TabIndex = 22;
-            this.txt4.Text = "1530.33";
-            this.txt4.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt4_KeyPress);
-            // 
-            // txt5
-            // 
-            this.txt5.Location = new System.Drawing.Point(186, 38);
-            this.txt5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt5.Name = "txt5";
-            this.txt5.Size = new System.Drawing.Size(33, 22);
-            this.txt5.TabIndex = 23;
-            this.txt5.Text = "0";
-            this.txt5.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt5_KeyPress);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(171, 9);
-            this.button4.Margin = new System.Windows.Forms.Padding(2);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(48, 23);
-            this.button4.TabIndex = 26;
-            this.button4.Text = "Setting";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.btn_Go.Location = new System.Drawing.Point(92, 105);
+            this.btn_Go.Name = "btn_Go";
+            this.btn_Go.Size = new System.Drawing.Size(168, 23);
+            this.btn_Go.TabIndex = 37;
+            this.btn_Go.Text = "Go";
+            this.btn_Go.Click += new System.EventHandler(this.btn_Go_Click);
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(34, 10);
+            this.comboBox1.ItemHeight = 23;
+            this.comboBox1.Location = new System.Drawing.Point(92, 64);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(132, 20);
-            this.comboBox1.TabIndex = 28;
+            this.comboBox1.Size = new System.Drawing.Size(168, 29);
+            this.comboBox1.TabIndex = 38;
             this.comboBox1.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             this.comboBox1.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(151, 64);
-            this.button5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(68, 27);
-            this.button5.TabIndex = 29;
-            this.button5.Text = "Script";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(13, 13);
+            this.checkBox1.Location = new System.Drawing.Point(23, 71);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(15, 14);
-            this.checkBox1.TabIndex = 30;
+            this.checkBox1.Size = new System.Drawing.Size(59, 15);
+            this.checkBox1.TabIndex = 39;
+            this.checkBox1.Text = "Repeat";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
-            // statusStrip1
+            // ProgressBar_Main
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.progressBar1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 96);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(231, 22);
-            this.statusStrip1.TabIndex = 32;
-            this.statusStrip1.Text = "statusStrip1";
+            this.ProgressBar_Main.HideProgressText = false;
+            this.ProgressBar_Main.Location = new System.Drawing.Point(-1, 172);
+            this.ProgressBar_Main.Name = "ProgressBar_Main";
+            this.ProgressBar_Main.Size = new System.Drawing.Size(280, 23);
+            this.ProgressBar_Main.Step = 2;
+            this.ProgressBar_Main.Style = MetroFramework.MetroColorStyle.Orange;
+            this.ProgressBar_Main.TabIndex = 40;
+            this.ProgressBar_Main.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.metroToolTip1.SetToolTip(this.ProgressBar_Main, "Scrip Progress");
             // 
-            // progressBar1
+            // label_1
             // 
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(210, 16);
+            this.label_1.AutoSize = true;
+            this.label_1.Location = new System.Drawing.Point(23, 145);
+            this.label_1.Name = "label_1";
+            this.label_1.Size = new System.Drawing.Size(50, 12);
+            this.label_1.TabIndex = 41;
+            this.label_1.Text = "Timespan";
             // 
-            // toolStripStatusLabel2
+            // label_timespan
             // 
-            this.toolStripStatusLabel2.AutoSize = true;
-            this.toolStripStatusLabel2.BackColor = System.Drawing.Color.Transparent;
-            this.toolStripStatusLabel2.Location = new System.Drawing.Point(78, 101);
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(11, 12);
-            this.toolStripStatusLabel2.TabIndex = 33;
-            this.toolStripStatusLabel2.Text = "0";
+            this.label_timespan.AutoSize = true;
+            this.label_timespan.Location = new System.Drawing.Point(136, 145);
+            this.label_timespan.Name = "label_timespan";
+            this.label_timespan.Size = new System.Drawing.Size(11, 12);
+            this.label_timespan.TabIndex = 42;
+            this.label_timespan.Text = "0";
             // 
-            // toolStripStatusLabel3
+            // label2
             // 
-            this.toolStripStatusLabel3.AutoSize = true;
-            this.toolStripStatusLabel3.BackColor = System.Drawing.Color.Transparent;
-            this.toolStripStatusLabel3.Location = new System.Drawing.Point(104, 101);
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(8, 12);
-            this.toolStripStatusLabel3.TabIndex = 34;
-            this.toolStripStatusLabel3.Text = "/";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.AutoSize = true;
-            this.toolStripStatusLabel1.BackColor = System.Drawing.Color.Transparent;
-            this.toolStripStatusLabel1.Location = new System.Drawing.Point(127, 101);
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(11, 12);
-            this.toolStripStatusLabel1.TabIndex = 35;
-            this.toolStripStatusLabel1.Text = "0";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(214, 145);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(43, 12);
+            this.label2.TabIndex = 43;
+            this.label2.Text = "Seconds";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(231, 118);
-            this.Controls.Add(this.toolStripStatusLabel1);
-            this.Controls.Add(this.toolStripStatusLabel3);
-            this.Controls.Add(this.toolStripStatusLabel2);
-            this.Controls.Add(this.statusStrip1);
+            this.ClientSize = new System.Drawing.Size(278, 198);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label_timespan);
+            this.Controls.Add(this.label_1);
+            this.Controls.Add(this.ProgressBar_Main);
             this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.txt5);
-            this.Controls.Add(this.txt4);
-            this.Controls.Add(this.txt3);
-            this.Controls.Add(this.txt2);
-            this.Controls.Add(this.txt1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btn_Go);
+            this.Controls.Add(this.metroButton1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
@@ -222,30 +140,21 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox txt1;
-        private System.Windows.Forms.TextBox txt2;
-        private System.Windows.Forms.TextBox txt3;
-        private System.Windows.Forms.TextBox txt4;
-        private System.Windows.Forms.TextBox txt5;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        internal System.Windows.Forms.ToolStripProgressBar progressBar1;
-        private System.Windows.Forms.Label toolStripStatusLabel2;
-        private System.Windows.Forms.Label toolStripStatusLabel3;
-        private System.Windows.Forms.Label toolStripStatusLabel1;
+        private MetroFramework.Controls.MetroButton metroButton1;
+        private MetroFramework.Controls.MetroButton btn_Go;
+        private MetroFramework.Controls.MetroComboBox comboBox1;
+        private MetroFramework.Controls.MetroCheckBox checkBox1;
+        private MetroFramework.Components.MetroToolTip metroToolTip1;
+        private MetroFramework.Controls.MetroProgressBar ProgressBar_Main;
+        private System.Windows.Forms.Label label_1;
+        private System.Windows.Forms.Label label_timespan;
+        private System.Windows.Forms.Label label2;
     }
 }
 

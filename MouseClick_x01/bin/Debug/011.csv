@@ -1,4 +1,0 @@
-No.,Event,X,Y
-1,Delay,1000,ms,
-2,WaitKey,T,,
-3,Click,747,14,
