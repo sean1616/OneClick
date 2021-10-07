@@ -81,14 +81,14 @@ namespace OneClick
             if (e.Clicks == 1)
             {
                 //wait row
-                string[] row_delay = new string[] { (dt.Rows.Count + 1).ToString(), "Delay", delta_dt.TotalMilliseconds.ToString(), "ms" };
+                string[] row_delay = new string[] { (dt.Rows.Count + 1).ToString(), "Delay", Math.Round(delta_dt.TotalSeconds, 2).ToString(), "s" , ""};
                 Update_Table(row_delay);
 
                 //click row
                 string btn_click = "";
                 btn_click = e.Button.ToString() == "Left" ? "Click" : "RClick";
 
-                string[] axis = new string[] { (dt.Rows.Count + 1).ToString(), btn_click, e.X.ToString(), e.Y.ToString() };
+                string[] axis = new string[] { (dt.Rows.Count + 1).ToString(), btn_click, e.X.ToString(), e.Y.ToString(), "" };
                 Update_Table(axis);
                 
                 Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}", (dt.Rows.Count + 1).ToString(), "Click", e.X.ToString(), e.Y.ToString(), e.Button, delta_dt.TotalMilliseconds);
@@ -173,12 +173,12 @@ namespace OneClick
             scriptProcessTime = DateTime.Now;
 
             //wait row
-            string[] row_delay = new string[] { (dt.Rows.Count + 1).ToString(), "Delay", delta_dt.TotalMilliseconds.ToString(), "ms" };
+            string[] row_delay = new string[] { (dt.Rows.Count + 1).ToString(), "Delay", Math.Round(delta_dt.TotalSeconds, 2).ToString(), "s", "" };
             Update_Table(row_delay);
 
             string keyInput = keycode_tranform(e.KeyData.ToString());
 
-            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Key", keyInput, "" };
+            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Key", keyInput, "", "" };
             Update_Table(row);
 
             Console.WriteLine("{0}, {1}, {2}, {3}, {4}, {5}", (dt.Rows.Count + 1).ToString(), "Key", e.KeyCode, "", "", delta_dt.TotalMilliseconds.ToString());
@@ -462,26 +462,26 @@ namespace OneClick
 
         }
 
-        private void Click_Check_CheckedChanged(object sender, EventArgs e)
-        {
-            record_checkbox_status = false;
-            ckBox_Record.Checked = false;
+        //private void Click_Check_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    record_checkbox_status = false;
+        //    ckBox_Record.Checked = false;
 
-            capture_checkbox_status = !capture_checkbox_status;
+        //    capture_checkbox_status = !capture_checkbox_status;
 
-            if (capture_checkbox_status == true)
-            {
-                hook_Main.InstallHook("1"); //開啟掛鉤
-                timer_cursor.Start();
-            }
-            else
-                timer_cursor.Stop();   
-        }
+        //    if (capture_checkbox_status == true)
+        //    {
+        //        hook_Main.InstallHook("1"); //開啟掛鉤
+        //        timer_cursor.Start();
+        //    }
+        //    else
+        //        timer_cursor.Stop();   
+        //}
 
         private void ckBox_Record_CheckedChanged(object sender, EventArgs e)
         {
-            capture_checkbox_status = false;
-            Click_Check.Checked = false;
+            //capture_checkbox_status = false;
+            //Click_Check.Checked = false;
 
             record_checkbox_status = !record_checkbox_status;
 
@@ -511,7 +511,7 @@ namespace OneClick
         {
             Point point = Cursor.Position;
             
-            string[] axis = new string[] { (dt.Rows.Count+1).ToString(), "Click", point.X.ToString(), point.Y.ToString() };
+            string[] axis = new string[] { (dt.Rows.Count+1).ToString(), "Click", point.X.ToString(), point.Y.ToString(), "" };
 
             Update_Table(axis);
         }
@@ -520,28 +520,28 @@ namespace OneClick
         {
             Point point = Cursor.Position;
 
-            string[] axis = new string[] { (dt.Rows.Count + 1).ToString(), "RClick", point.X.ToString(), point.Y.ToString() };
+            string[] axis = new string[] { (dt.Rows.Count + 1).ToString(), "RClick", point.X.ToString(), point.Y.ToString(), "" };
 
             Update_Table(axis);
         }
 
         private void Write_Delay()
         {
-            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Delay", "100", "ms" };
+            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Delay", "100", "ms", "" };
 
             Update_Table(row);
         }
 
         private void Write_Key()
         {
-            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Key", "", "" };
+            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "Key", "", "", "" };
 
             Update_Table(row);
         }
 
         private void Write_WaitKey()
         {
-            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "WaitKey", "", "" };
+            string[] row = new string[] { (dt.Rows.Count + 1).ToString(), "WaitKey", "", "", "" };
 
             Update_Table(row);
         }

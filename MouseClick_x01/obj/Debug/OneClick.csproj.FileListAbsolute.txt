@@ -12,3 +12,17 @@ C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.csproj.
 C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.csproj.CopyComplete
 C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.exe
 C:\Users\sean_wu\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.pdb
+C:\Users\user\source\repos\OneClick\MouseClick_x01\bin\Debug\OneClick.exe.config
+C:\Users\user\source\repos\OneClick\MouseClick_x01\bin\Debug\OneClick.exe
+C:\Users\user\source\repos\OneClick\MouseClick_x01\bin\Debug\OneClick.pdb
+C:\Users\user\source\repos\OneClick\MouseClick_x01\bin\Debug\MetroFramework.dll
+C:\Users\user\source\repos\OneClick\MouseClick_x01\bin\Debug\MetroFramework.Fonts.dll
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.csproj.AssemblyReference.cache
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.Form1.resources
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.Properties.Resources.resources
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.Script_Form.resources
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.csproj.GenerateResource.cache
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.csproj.CopyComplete
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.exe
+C:\Users\user\source\repos\OneClick\MouseClick_x01\obj\Debug\OneClick.pdb
