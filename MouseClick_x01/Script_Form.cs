@@ -300,7 +300,8 @@ namespace OneClick
         }
         
         private async void hook_MainKeyDown(object sender, KeyEventArgs e)
-        {            
+        {
+            Console.WriteLine(e.KeyCode);
             if (e.KeyCode == Keys.F1 && capture_checkbox_status == true)
             {
                 Write_Click(e);
