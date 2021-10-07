@@ -1,4 +1,4 @@
-No.,Event,X,Y
+No.,Event,X,Y,Note
 1,Delay,12000,ms,
 2,Click,706,49,
 3,Delay,4500,ms,

@@ -83,6 +83,18 @@ namespace OneClick
             }
             else return false;
         }
+
+        public void Action_KeyString(string keystring)
+        {
+            try
+            {
+                SendKeys.SendWait(keystring);
+            }
+            catch
+            {
+                MessageBox.Show("Somethin wrong when send the key");
+            }
+        }
                 
         public void Action_Key(string key_X, string key_Y)
         {
@@ -110,7 +122,7 @@ namespace OneClick
                     break;
                 case "Enter":
                     key_X = "{ENTER}";
-                    break;
+                    break;                
                 case "ESC":
                     key_X = "{ESC}";
                     break;
