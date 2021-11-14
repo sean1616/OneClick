@@ -52,11 +52,14 @@
             this.dataGridView_script.AllowUserToResizeColumns = false;
             this.dataGridView_script.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.dataGridView_script.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView_script.Location = new System.Drawing.Point(12, 170);
-            this.dataGridView_script.MinimumSize = new System.Drawing.Size(237, 0);
+            this.dataGridView_script.Location = new System.Drawing.Point(18, 255);
+            this.dataGridView_script.Margin = new System.Windows.Forms.Padding(4);
+            this.dataGridView_script.MaximumSize = new System.Drawing.Size(446, 600);
+            this.dataGridView_script.MinimumSize = new System.Drawing.Size(356, 0);
             this.dataGridView_script.Name = "dataGridView_script";
+            this.dataGridView_script.RowHeadersWidth = 62;
             this.dataGridView_script.RowTemplate.Height = 24;
-            this.dataGridView_script.Size = new System.Drawing.Size(297, 334);
+            this.dataGridView_script.Size = new System.Drawing.Size(446, 501);
             this.dataGridView_script.TabIndex = 8;
             this.dataGridView_script.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_script_CellContentClick);
             this.dataGridView_script.ColumnWidthChanged += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridView_script_ColumnWidthChanged);
@@ -65,89 +68,99 @@
             // 
             // txtBox_name
             // 
-            this.txtBox_name.Location = new System.Drawing.Point(89, 89);
+            this.txtBox_name.Location = new System.Drawing.Point(134, 134);
+            this.txtBox_name.Margin = new System.Windows.Forms.Padding(4);
             this.txtBox_name.Name = "txtBox_name";
-            this.txtBox_name.Size = new System.Drawing.Size(220, 22);
+            this.txtBox_name.Size = new System.Drawing.Size(328, 29);
             this.txtBox_name.TabIndex = 10;
             this.txtBox_name.TextChanged += new System.EventHandler(this.txtBox_name_TextChanged);
             // 
             // txt_ms_X
             // 
             this.txt_ms_X.AutoSize = true;
-            this.txt_ms_X.Location = new System.Drawing.Point(94, 119);
+            this.txt_ms_X.Location = new System.Drawing.Point(141, 178);
+            this.txt_ms_X.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.txt_ms_X.Name = "txt_ms_X";
-            this.txt_ms_X.Size = new System.Drawing.Size(11, 12);
+            this.txt_ms_X.Size = new System.Drawing.Size(16, 18);
             this.txt_ms_X.TabIndex = 11;
             this.txt_ms_X.Text = "0";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(130, 119);
+            this.label1.Location = new System.Drawing.Point(195, 178);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(20, 12);
+            this.label1.Size = new System.Drawing.Size(31, 18);
             this.label1.TabIndex = 12;
             this.label1.Text = " ，";
             // 
             // txt_ms_Y
             // 
             this.txt_ms_Y.AutoSize = true;
-            this.txt_ms_Y.Location = new System.Drawing.Point(176, 119);
+            this.txt_ms_Y.Location = new System.Drawing.Point(264, 178);
+            this.txt_ms_Y.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.txt_ms_Y.Name = "txt_ms_Y";
-            this.txt_ms_Y.Size = new System.Drawing.Size(11, 12);
+            this.txt_ms_Y.Size = new System.Drawing.Size(16, 18);
             this.txt_ms_Y.TabIndex = 13;
             this.txt_ms_Y.Text = "0";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 119);
+            this.label2.Location = new System.Drawing.Point(18, 178);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(37, 12);
+            this.label2.Size = new System.Drawing.Size(54, 18);
             this.label2.TabIndex = 14;
             this.label2.Text = "Cursor";
             // 
             // metroButton1
             // 
-            this.metroButton1.Location = new System.Drawing.Point(12, 60);
+            this.metroButton1.Location = new System.Drawing.Point(18, 90);
+            this.metroButton1.Margin = new System.Windows.Forms.Padding(4);
             this.metroButton1.Name = "metroButton1";
-            this.metroButton1.Size = new System.Drawing.Size(68, 23);
+            this.metroButton1.Size = new System.Drawing.Size(102, 34);
             this.metroButton1.TabIndex = 17;
             this.metroButton1.Text = "New";
             this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
             // 
             // metroButton2
             // 
-            this.metroButton2.Location = new System.Drawing.Point(88, 60);
+            this.metroButton2.Location = new System.Drawing.Point(132, 90);
+            this.metroButton2.Margin = new System.Windows.Forms.Padding(4);
             this.metroButton2.Name = "metroButton2";
-            this.metroButton2.Size = new System.Drawing.Size(68, 23);
+            this.metroButton2.Size = new System.Drawing.Size(102, 34);
             this.metroButton2.TabIndex = 18;
             this.metroButton2.Text = "Insert";
             this.metroButton2.Click += new System.EventHandler(this.metroButton2_Click);
             // 
             // metroButton3
             // 
-            this.metroButton3.Location = new System.Drawing.Point(164, 60);
+            this.metroButton3.Location = new System.Drawing.Point(246, 90);
+            this.metroButton3.Margin = new System.Windows.Forms.Padding(4);
             this.metroButton3.Name = "metroButton3";
-            this.metroButton3.Size = new System.Drawing.Size(68, 23);
+            this.metroButton3.Size = new System.Drawing.Size(102, 34);
             this.metroButton3.TabIndex = 19;
             this.metroButton3.Text = "Save";
             this.metroButton3.Click += new System.EventHandler(this.button4_Click);
             // 
             // btn_go
             // 
-            this.btn_go.Location = new System.Drawing.Point(240, 60);
+            this.btn_go.Location = new System.Drawing.Point(360, 90);
+            this.btn_go.Margin = new System.Windows.Forms.Padding(4);
             this.btn_go.Name = "btn_go";
-            this.btn_go.Size = new System.Drawing.Size(68, 23);
+            this.btn_go.Size = new System.Drawing.Size(102, 34);
             this.btn_go.TabIndex = 20;
             this.btn_go.Text = "Go";
             this.btn_go.Click += new System.EventHandler(this.btn_GO_Click);
             // 
             // metroButton5
             // 
-            this.metroButton5.Location = new System.Drawing.Point(241, 116);
+            this.metroButton5.Location = new System.Drawing.Point(362, 174);
+            this.metroButton5.Margin = new System.Windows.Forms.Padding(4);
             this.metroButton5.Name = "metroButton5";
-            this.metroButton5.Size = new System.Drawing.Size(68, 23);
+            this.metroButton5.Size = new System.Drawing.Size(102, 34);
             this.metroButton5.TabIndex = 21;
             this.metroButton5.Text = "Help";
             this.metroButton5.Click += new System.EventHandler(this.button3_Click_1);
@@ -155,36 +168,40 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 147);
+            this.label3.Location = new System.Drawing.Point(18, 220);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(50, 12);
+            this.label3.Size = new System.Drawing.Size(75, 18);
             this.label3.TabIndex = 22;
             this.label3.Text = "Timespan";
             // 
             // label_timespan
             // 
             this.label_timespan.AutoSize = true;
-            this.label_timespan.Location = new System.Drawing.Point(94, 147);
+            this.label_timespan.Location = new System.Drawing.Point(141, 220);
+            this.label_timespan.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_timespan.Name = "label_timespan";
-            this.label_timespan.Size = new System.Drawing.Size(11, 12);
+            this.label_timespan.Size = new System.Drawing.Size(16, 18);
             this.label_timespan.TabIndex = 23;
             this.label_timespan.Text = "0";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(264, 147);
+            this.label4.Location = new System.Drawing.Point(396, 220);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(43, 12);
+            this.label4.Size = new System.Drawing.Size(64, 18);
             this.label4.TabIndex = 24;
             this.label4.Text = "Seconds";
             // 
             // ckBox_Record
             // 
             this.ckBox_Record.AutoSize = true;
-            this.ckBox_Record.Location = new System.Drawing.Point(12, 92);
+            this.ckBox_Record.Location = new System.Drawing.Point(18, 138);
+            this.ckBox_Record.Margin = new System.Windows.Forms.Padding(4);
             this.ckBox_Record.Name = "ckBox_Record";
-            this.ckBox_Record.Size = new System.Drawing.Size(58, 16);
+            this.ckBox_Record.Size = new System.Drawing.Size(83, 22);
             this.ckBox_Record.TabIndex = 25;
             this.ckBox_Record.Text = "Record";
             this.ckBox_Record.UseVisualStyleBackColor = true;
@@ -192,9 +209,9 @@
             // 
             // Script_Form
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(320, 535);
+            this.ClientSize = new System.Drawing.Size(480, 802);
             this.Controls.Add(this.ckBox_Record);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label_timespan);
@@ -210,7 +227,9 @@
             this.Controls.Add(this.txt_ms_X);
             this.Controls.Add(this.txtBox_name);
             this.Controls.Add(this.dataGridView_script);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Script_Form";
+            this.Padding = new System.Windows.Forms.Padding(30, 90, 30, 30);
             this.Text = "Script_Form";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Script_Form_FormClosed);
             this.Load += new System.EventHandler(this.Script_Form_Load);

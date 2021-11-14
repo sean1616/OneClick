@@ -1,2 +1,5 @@
 No.,Event,X,Y,Note
-1,Click,305,264,
+1,Delay,1.98,s,,
+2,Click,941,412,,
+3,Delay,2.42,s,,
+4,Click,837,564,,

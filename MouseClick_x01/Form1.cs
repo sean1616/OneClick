@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace OneClick
     public partial class Form1 : MetroFramework.Forms.MetroForm
     {
         Thread sample;
+        public SerialPort port_PD;
 
         public static bool chechBox_Repeat = false;
 
@@ -88,6 +90,14 @@ namespace OneClick
                 comboBox1.SelectedIndex = 0;
                 selected_csv = comboBox1.SelectedItem.ToString();
             }
+
+            metroComboBox1.Items.Clear();
+            myPorts = SerialPort.GetPortNames();
+
+            foreach (string s in myPorts) metroComboBox1.Items.Add(s);  //寫入所有取得的com
+
+            if (metroComboBox1.Items.Count > 0)
+                metroComboBox1.SelectedIndex = 0;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -298,6 +308,11 @@ namespace OneClick
         
         private void btn_Go_Click(object sender, EventArgs e)
         {
+            btn_GO_Event();
+        }
+
+        private void btn_GO_Event()
+        {
             if (btn_Go.Text.Equals("Go"))
             {
                 btn_Go.Text = "Stop";
@@ -497,7 +512,76 @@ namespace OneClick
             //checkBox_checked = checkBox1.Checked;
             chechBox_Repeat = checkBox1.Checked;
         }
-               
+
+        string[] myPorts;
+
+        private void metroComboBox1_DropDown(object sender, EventArgs e)
+        {
+            //MessageBox.Show("Open");
+            metroComboBox1.Items.Clear();
+            myPorts = SerialPort.GetPortNames();
+
+            foreach (string s in myPorts) metroComboBox1.Items.Add(s);  //寫入所有取得的com
+        }
+
+        System.Windows.Forms.Timer timer_getData_from_port;
+        string slcPort = "";
+        private void metroComboBox1_DropDownClosed(object sender, EventArgs e)
+        {
+        }
+
+        private void Timer_getData_from_port_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                int size = port_PD.BytesToRead;
+                byte[] dataBuffer = new byte[size];
+                int length = port_PD.Read(dataBuffer, 0, size);
+
+                if (length > 0 )
+                {
+                    string msg = Encoding.ASCII.GetString(dataBuffer);
+                    
+                    if(msg.Contains("Get Data:"))
+                    {
+                        msg = msg.Replace("Get Data:", "");
+                        label_portMsg.Text = msg;
+                        //timer_getData_from_port.Stop();
+                        btn_GO_Event();
+                    }
+                    
+                }
+            }
+            catch { }
+        }
+
+        private void metroButton_connect_Click(object sender, EventArgs e)
+        {
+            slcPort = metroComboBox1.SelectedItem.ToString();
+            if (string.IsNullOrEmpty(slcPort))
+            {
+                label_portMsg.Text = "Selected port empty";
+                return;
+            }
+
+            try
+            {
+                port_PD = new SerialPort(slcPort, 115200, Parity.None, 8, StopBits.One);
+                port_PD.Open();
+                label_portMsg.Text = "Port Connected";
+
+
+                timer_getData_from_port = new System.Windows.Forms.Timer();
+                timer_getData_from_port.Interval = 300;
+                timer_getData_from_port.Tick += Timer_getData_from_port_Tick;
+                timer_getData_from_port.Start();
+            }
+            catch
+            {
+                MessageBox.Show("Open port failed !");
+            }
+        }
+
         public string Selected_csv()
         {
             return selected_csv;

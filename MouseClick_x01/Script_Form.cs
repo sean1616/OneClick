@@ -298,7 +298,10 @@ namespace OneClick
             dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
             //this.Height = dataGridView_script.Height + 127;
 
-            this.Size = new Size(Size.Width , lines_count * 24 + 205);   //Resize form by the number of data rows, 1 line = 24 heigh
+            int Script_WindowSize_Height = lines_count * 44 + 259;
+            Script_WindowSize_Height = Script_WindowSize_Height > 880 ? 880 : Script_WindowSize_Height;
+
+            this.Size = new Size(480, Script_WindowSize_Height);   //Resize form by the number of data rows, 1 line = 24 heigh
         }
 
         private void timer_cursor_Tick(object Sender, EventArgs e)
@@ -565,7 +568,13 @@ namespace OneClick
             //Set form size
             dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
 
-            this.Size = new Size(Size.Width, dataGridView_script.RowCount * 24 + 205);
+            //int Script_WindowSize_Height = lines_count * 44 + 259;
+            //Script_WindowSize_Height = Script_WindowSize_Height > 880 ? 880 : Script_WindowSize_Height;
+
+            //this.Size = new Size(480, Script_WindowSize_Height);   //Resize form by the number of data rows, 1 line = 24 heigh
+
+            int height = (Size.Height + 24) > 880 ? 880 : Size.Height + 24;
+            this.Size = new Size(Size.Width, height);
 
             //dataGridView_script.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 
@@ -582,8 +591,8 @@ namespace OneClick
 
         private void dataGridView_script_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
         {
-            dataGridView_script.Width = dataGridView_script.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + 65;
-            this.Width = dataGridView_script.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + 88;
+            //dataGridView_script.Width = dataGridView_script.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + 65;
+            //this.Width = dataGridView_script.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + 88;
         }
 
         private void dataGridView_script_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
