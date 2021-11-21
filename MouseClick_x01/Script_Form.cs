@@ -46,6 +46,9 @@ namespace OneClick
         {
             InitializeComponent();
 
+            //Fix Form needs two times click to get focus after you choose other apps.
+            this.ShadowType = MetroFramework.Forms.MetroForm.MetroFormShadowType.None;
+
             this.form_main = form_main;
 
             AC = new Actions_Collection();
@@ -296,7 +299,6 @@ namespace OneClick
 
             //Set form size
             dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
-            //this.Height = dataGridView_script.Height + 127;
 
             int Script_WindowSize_Height = lines_count * 44 + 259;
             Script_WindowSize_Height = Script_WindowSize_Height > 880 ? 880 : Script_WindowSize_Height;
@@ -504,7 +506,14 @@ namespace OneClick
 
                     //Set form size
                     dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
-                    this.Size = new Size(Size.Width, dataGridView_script.RowCount * 24 + 205);
+
+                    int Script_WindowSize_Height = lines_count * 44 + 259;
+                    Script_WindowSize_Height = Script_WindowSize_Height > 880 ? 880 : Script_WindowSize_Height;
+
+                    this.Size = new Size(480, Script_WindowSize_Height);   //Resize form by the number of data rows, 1 line = 24 heigh
+
+                    //dataGridView_script.Height = dataGridView_script.RowTemplate.Height * dataGridView_script.Rows.Count + dataGridView_script.ColumnHeadersHeight + 24;
+                    //this.Size = new Size(Size.Width, dataGridView_script.RowCount * 24 + 205);
                 }
             }
         }

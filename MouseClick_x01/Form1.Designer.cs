@@ -176,9 +176,8 @@
             this.label_portMsg.Location = new System.Drawing.Point(230, 37);
             this.label_portMsg.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label_portMsg.Name = "label_portMsg";
-            this.label_portMsg.Size = new System.Drawing.Size(35, 16);
+            this.label_portMsg.Size = new System.Drawing.Size(0, 16);
             this.label_portMsg.TabIndex = 47;
-            this.label_portMsg.Text = "Null";
             // 
             // Form1
             // 

@@ -14,6 +14,8 @@ using System.Timers;
 using System.Threading;
 using System.Runtime.InteropServices;
 
+using MetroFramework;
+
 namespace OneClick
 {
     public partial class Form1 : MetroFramework.Forms.MetroForm
@@ -51,6 +53,9 @@ namespace OneClick
         public Form1()
         {
             InitializeComponent();
+
+            //Fix Form needs two times click to get focus after you choose other apps.
+            this.ShadowType = MetroFramework.Forms.MetroForm.MetroFormShadowType.None;
 
             hook_Main = new Hocy_Hook();
 
@@ -557,28 +562,50 @@ namespace OneClick
 
         private void metroButton_connect_Click(object sender, EventArgs e)
         {
-            slcPort = metroComboBox1.SelectedItem.ToString();
-            if (string.IsNullOrEmpty(slcPort))
-            {
-                label_portMsg.Text = "Selected port empty";
-                return;
-            }
-
             try
             {
-                port_PD = new SerialPort(slcPort, 115200, Parity.None, 8, StopBits.One);
-                port_PD.Open();
-                label_portMsg.Text = "Port Connected";
+                if(metroButton_connect.Text == "Connect")
+                {
+                    slcPort = metroComboBox1.SelectedItem.ToString();
+                    if (string.IsNullOrEmpty(slcPort))
+                    {
+                        label_portMsg.Text = "Selected port empty";
+                        return;
+                    }
 
+                    try
+                    {
+                        port_PD = new SerialPort(slcPort, 115200, Parity.None, 8, StopBits.One);
+                        port_PD.Open();
+                        //label_portMsg.Text = "Port Connected";
+                        metroButton_connect.Text = "Disconnected";
 
-                timer_getData_from_port = new System.Windows.Forms.Timer();
-                timer_getData_from_port.Interval = 300;
-                timer_getData_from_port.Tick += Timer_getData_from_port_Tick;
-                timer_getData_from_port.Start();
+                        timer_getData_from_port = new System.Windows.Forms.Timer();
+                        timer_getData_from_port.Interval = 30;
+                        timer_getData_from_port.Tick += Timer_getData_from_port_Tick;
+                        timer_getData_from_port.Start();
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Open port failed !");
+                    }
+                }
+                else if (metroButton_connect.Text == "Disconnected")
+                {
+                    if (port_PD != null)
+                    {
+                        if (port_PD.IsOpen)
+                        {
+                            port_PD.Close();
+                            metroButton_connect.Text = "Connect";
+                            //label_portMsg.Text = "Port Disconnected";
+                        }
+                    }
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("Open port failed !");
+                MessageBox.Show(ex.ToString());
             }
         }
 

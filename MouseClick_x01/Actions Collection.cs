@@ -112,7 +112,7 @@ namespace OneClick
                     key_X = "%";
                     break;
                 case "Backspace":
-                    key_X = "{BS}";
+                    key_X = "{BS}"; 
                     break;
                 case "Delete":
                     key_X = "{DEL}";

@@ -1,0 +1,13 @@
+No.,Event,X,Y,Note
+1,Delay,0.09,s,,
+2,Click,1250,16,,
+3,Delay,3.16,s,,
+4,Key, ,,,
+5,Delay,1.75,s,,
+6,Key,D0 0 0 0 5 1 9 8 9,,Content,
+7,Delay,0.2,s,,
+8,Key,Enter,,,
+9,Delay,0.8,s,,
+10,RClick,286,684,,
+11,Delay,0.8,s,,
+12,Click,411,395,,
